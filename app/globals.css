@@ -88,13 +88,9 @@
   --semantic-foreground: #ffffff;
 }
 
-/* Dark mode is NOT in the Figma export — define values manually before use.
-.dark {
-  --background: #0a0a0a;
-  --foreground: #fafafa;
-  ... etc
-}
-*/
+/* Dark mode is NOT in the Figma export. The .dark values below follow
+   shadcn/ui's neutral dark defaults, mapped to the same Tailwind neutral
+   palette used in :root above — they are NOT sourced from Figma. */
 
 @layer base {
   * {
@@ -105,4 +101,33 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+.dark {
+  --background:             #0a0a0a;   /* tw/colors: neutral/950 */
+  --foreground:             #fafafa;   /* tw/colors: neutral/50 */
+  --card:                   #0a0a0a;
+  --card-foreground:        #fafafa;
+  --popover:                #0a0a0a;
+  --popover-foreground:     #fafafa;
+  --primary:                #fafafa;   /* inverted: neutral/50 */
+  --primary-foreground:     #171717;   /* tw/colors: neutral/900 */
+  --secondary:              #262626;   /* tw/colors: neutral/800 */
+  --secondary-foreground:   #fafafa;
+  --muted:                  #262626;
+  --muted-foreground:       #a3a3a3;   /* tw/colors: neutral/400 */
+  --accent:                 #262626;
+  --accent-foreground:      #fafafa;
+  --destructive:            #ef4444;   /* tw/colors: red/500 — inline text 5.26:1 on bg; button uses bg-destructive/60 → 7.91:1 white */
+  --border:                 #262626;
+  --input:                  #262626;
+  --ring:                   #737373;   /* tw/colors: neutral/500 */
+  --sidebar:                      #171717;   /* tw/colors: neutral/900 */
+  --sidebar-foreground:           #fafafa;
+  --sidebar-primary:              #fafafa;
+  --sidebar-primary-foreground:   #171717;
+  --sidebar-accent:               #262626;
+  --sidebar-accent-foreground:    #fafafa;
+  --sidebar-border:               #262626;
+  --sidebar-ring:                 #737373;
 }
