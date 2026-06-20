@@ -19,7 +19,7 @@ We are doing **all ~55 components**, not just 3 — batched by the Storybook sid
 | Deliverable | Status |
 |---|---|
 | 1 — Design Component | ✅ Done — all components token-driven, variants/states present, **a11y 0 violations** |
-| 2 — Component Documentation | 🚧 In progress — architecture done; **content 19/54 written** (see batches) |
+| 2 — Component Documentation | 🚧 In progress — architecture done; **content 31/54 written** (see batches) |
 | 3 — Into Storybook | ✅ Done — config, 55 CSF story files, autodocs on all, a11y addon green; docs page wired (lights up as deliverable-2 batches fill) |
 
 ### Deliverable 2 — documentation batches
@@ -27,7 +27,7 @@ We are doing **all ~55 components**, not just 3 — batched by the Storybook sid
 | Batch (sidebar group) | Done | Remaining |
 |---|---|---|
 | **Forms** (19) | 19 ✅ all done | — |
-| **Overlays** (12) | 0 | all 12 |
+| **Overlays** (12) | 12 ✅ all done | — |
 | **Feedback** (7) | 0 | all 7 |
 | **Data Display** (16) | 0 | all 16 |
 
@@ -53,8 +53,8 @@ Note: `tsconfig.json` excludes `**/*.stories.tsx` from the Next build (stories a
 
 ## Next steps
 
-1. **Forms** ✅ done (19/19).
-2. Next: **Overlays** (12) → **Feedback** (7) → **Data Display** (16) → add entries to `lib/component-details.ts`.
+1. **Forms** ✅ done (19/19). **Overlays** ✅ done (12/12).
+2. Next: **Feedback** (7) → **Data Display** (16) → add entries to `lib/component-details.ts`.
 3. (Optional, score) add `argTypes`/controls to the hand-authored `components/ui/*.stories.tsx` beyond the current few.
 4. Commit at each batch boundary.
 

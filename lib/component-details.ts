@@ -910,4 +910,509 @@ export const componentDetails: Record<string, ComponentDetail> = {
       { token: "text-muted-foreground", role: "placeholder / icons" },
     ],
   },
+
+  // ── Overlays ───────────────────────────────────────────────────────────────
+  dialog: {
+    overview:
+      "A modal window layered over the page that interrupts the user and expects a response. Built on Radix Dialog; focus is trapped while open.",
+    anatomy: [
+      "Dialog — the stateful root.",
+      "DialogTrigger — opens the dialog.",
+      "DialogOverlay — the dimmed backdrop.",
+      "DialogContent — the centered panel (bg-background) with a built-in close button.",
+      "DialogHeader / DialogTitle / DialogDescription — heading region.",
+      "DialogFooter — action buttons row.",
+      "DialogClose — dismisses the dialog.",
+    ],
+    props: [
+      { name: "open", type: "boolean", description: "Controlled open state (on Dialog)." },
+      { name: "defaultOpen", type: "boolean", description: "Uncontrolled initial state." },
+      { name: "onOpenChange", type: "(open: boolean) => void", description: "Fires when open changes." },
+      { name: "modal", type: "boolean", default: "true", description: "Whether interaction with outside content is blocked." },
+    ],
+    states: [
+      { name: "closed", description: "Only the trigger is present." },
+      { name: "open", description: "Overlay + content animate in; focus moves into the dialog and is trapped." },
+      { name: "closing", description: "Exit animation; focus returns to the trigger." },
+    ],
+    usage: {
+      do: [
+        "Always provide a DialogTitle (and ideally a DialogDescription) for the accessible name.",
+        "Use for focused tasks or confirmations that need the user's full attention.",
+        "Keep footer actions clear (primary + cancel).",
+      ],
+      dont: [
+        "Don't nest dialogs or use one for non-blocking info — use a Popover/Toast.",
+        "Don't omit the title; screen readers rely on it.",
+      ],
+    },
+    a11y: [
+      "role=dialog with aria-modal; focus is trapped and restored to the trigger on close.",
+      "Esc closes; the title provides the accessible name (use VisuallyHidden if visually omitted).",
+      "Outside content is inert while modal.",
+    ],
+    tokens: [
+      { token: "bg-background", role: "dialog panel" },
+      { token: "bg-accent", role: "close-button hover" },
+      { token: "text-muted-foreground", role: "description text" },
+      { token: "ring-ring", role: "close-button focus ring" },
+    ],
+  },
+
+  "alert-dialog": {
+    overview:
+      "A modal that interrupts with an important message and requires a deliberate confirm or cancel — used for destructive or irreversible actions.",
+    anatomy: [
+      "AlertDialog — the stateful root.",
+      "AlertDialogTrigger — opens it.",
+      "AlertDialogOverlay / AlertDialogContent — backdrop + panel.",
+      "AlertDialogHeader / AlertDialogTitle / AlertDialogDescription — message.",
+      "AlertDialogMedia — optional icon/illustration slot.",
+      "AlertDialogFooter — AlertDialogAction (confirm) + AlertDialogCancel.",
+    ],
+    props: [
+      { name: "open", type: "boolean", description: "Controlled open state." },
+      { name: "onOpenChange", type: "(open: boolean) => void", description: "Fires when open changes." },
+    ],
+    states: [
+      { name: "closed", description: "Only the trigger is present." },
+      { name: "open", description: "Focus trapped; focus lands on AlertDialogCancel by default (safer choice)." },
+    ],
+    usage: {
+      do: [
+        "Use specifically for confirmations of risky/irreversible actions.",
+        "Label the action button with the verb (e.g. 'Delete'), not 'OK'.",
+        "Keep Cancel as the safe default.",
+      ],
+      dont: [
+        "Don't use for routine dialogs — use Dialog.",
+        "Don't make the destructive action the default focus.",
+      ],
+    },
+    a11y: [
+      "role=alertdialog; focus is trapped and starts on the cancel action.",
+      "Esc cancels; title + description form the accessible name/description.",
+    ],
+    tokens: [
+      { token: "bg-background", role: "panel" },
+      { token: "bg-muted", role: "media/icon surface" },
+      { token: "text-muted-foreground", role: "description" },
+    ],
+  },
+
+  sheet: {
+    overview:
+      "A panel that slides in from an edge of the screen for secondary content or tasks without leaving the page. Built on Radix Dialog.",
+    anatomy: [
+      "Sheet — the stateful root.",
+      "SheetTrigger / SheetClose — open / dismiss.",
+      "SheetOverlay — backdrop.",
+      "SheetContent — the edge-anchored panel (side: top/right/bottom/left).",
+      "SheetHeader / SheetTitle / SheetDescription / SheetFooter.",
+    ],
+    props: [
+      { name: "side", type: '"top" | "right" | "bottom" | "left"', default: '"right"', description: "Edge the sheet slides in from (on SheetContent)." },
+      { name: "open", type: "boolean", description: "Controlled open state." },
+      { name: "onOpenChange", type: "(open: boolean) => void", description: "Fires when open changes." },
+    ],
+    variants: ["side: top · right · bottom · left"],
+    states: [
+      { name: "closed", description: "Only the trigger is present." },
+      { name: "open", description: "Slides in from the chosen side; focus trapped." },
+      { name: "closing", description: "Slides out; focus returns to trigger." },
+    ],
+    usage: {
+      do: [
+        "Use for navigation, filters, or detail panels that complement the main view.",
+        "Provide a SheetTitle for the accessible name.",
+        "Pick the side that matches the content's relationship to the page.",
+      ],
+      dont: [
+        "Don't use a sheet for a blocking confirmation — use Alert Dialog.",
+        "Don't stuff a whole separate page into a sheet.",
+      ],
+    },
+    a11y: [
+      "role=dialog with focus trap and restore, like Dialog.",
+      "Esc closes; needs a title for its accessible name.",
+    ],
+    tokens: [
+      { token: "bg-background", role: "panel" },
+      { token: "bg-secondary", role: "close-button hover" },
+      { token: "text-foreground / text-muted-foreground", role: "title / description" },
+      { token: "ring-ring", role: "close-button focus ring" },
+    ],
+  },
+
+  drawer: {
+    overview:
+      "An edge-anchored panel with drag-to-dismiss, optimised for touch. Built on Vaul. Often used as the mobile counterpart to Dialog/Sheet.",
+    anatomy: [
+      "Drawer — the stateful root (direction: top/bottom/left/right).",
+      "DrawerTrigger / DrawerClose.",
+      "DrawerOverlay — backdrop.",
+      "DrawerContent — the sliding panel with a drag handle (bottom direction).",
+      "DrawerHeader / DrawerTitle / DrawerDescription / DrawerFooter.",
+    ],
+    props: [
+      { name: "direction", type: '"top" | "bottom" | "left" | "right"', default: '"bottom"', description: "Edge the drawer slides from." },
+      { name: "open", type: "boolean", description: "Controlled open state." },
+      { name: "onOpenChange", type: "(open: boolean) => void", description: "Fires when open changes." },
+    ],
+    variants: ["direction: top · bottom · left · right"],
+    states: [
+      { name: "closed", description: "Only the trigger is present." },
+      { name: "open", description: "Slides in; a drag handle allows swipe-to-dismiss (bottom)." },
+      { name: "dragging", description: "Follows the pointer/touch during a drag." },
+    ],
+    usage: {
+      do: [
+        "Use for mobile-first sheets, action lists, or pickers.",
+        "Provide a DrawerTitle.",
+        "Keep content short so it fits without excessive scrolling.",
+      ],
+      dont: [
+        "Don't use for desktop modal tasks where Dialog is clearer.",
+      ],
+    },
+    a11y: [
+      "Focus is trapped while open and restored on close.",
+      "Swipe-to-dismiss is augmented by Esc/close button and a labelled title.",
+    ],
+    tokens: [
+      { token: "bg-background", role: "panel" },
+      { token: "bg-muted", role: "drag handle" },
+      { token: "text-foreground / text-muted-foreground", role: "title / description" },
+    ],
+  },
+
+  popover: {
+    overview:
+      "A non-modal floating panel anchored to a trigger, for rich content like forms or details. Built on Radix Popover.",
+    anatomy: [
+      "Popover — the stateful root.",
+      "PopoverTrigger — the anchor that toggles it.",
+      "PopoverAnchor — optional alternate anchor element.",
+      "PopoverContent — the floating panel (bg-popover) with side/align positioning.",
+      "PopoverHeader / PopoverTitle / PopoverDescription — optional heading region.",
+    ],
+    props: [
+      { name: "open", type: "boolean", description: "Controlled open state." },
+      { name: "onOpenChange", type: "(open: boolean) => void", description: "Fires when open changes." },
+      { name: "side (content)", type: '"top" | "right" | "bottom" | "left"', default: '"bottom"', description: "Preferred side relative to the trigger." },
+      { name: "align (content)", type: '"start" | "center" | "end"', default: '"center"', description: "Alignment along that side." },
+    ],
+    states: [
+      { name: "closed", description: "Only the trigger is present." },
+      { name: "open", description: "Panel animates in, positioned by side/align; focus moves inside." },
+    ],
+    usage: {
+      do: [
+        "Use for supplementary, non-blocking content tied to a control.",
+        "Keep it dismissible by click-outside and Esc (default).",
+      ],
+      dont: [
+        "Don't use for critical flows that need focus trapping — use Dialog.",
+        "Don't put very long content in a popover.",
+      ],
+    },
+    a11y: [
+      "Non-modal: focus moves into the content but the rest of the page stays interactive.",
+      "Esc and click-outside close it; focus returns to the trigger.",
+    ],
+    tokens: [
+      { token: "bg-popover / text-popover-foreground", role: "panel surface + text" },
+      { token: "text-muted-foreground", role: "description text" },
+    ],
+  },
+
+  "hover-card": {
+    overview:
+      "A preview card that appears on hover/focus of a link or element, for sighted users to peek at related content. Built on Radix HoverCard.",
+    anatomy: [
+      "HoverCard — the stateful root.",
+      "HoverCardTrigger — the hovered/focused element.",
+      "HoverCardContent — the floating preview card (bg-popover).",
+    ],
+    props: [
+      { name: "openDelay", type: "number", default: "700", description: "ms before opening on hover." },
+      { name: "closeDelay", type: "number", default: "300", description: "ms before closing after leaving." },
+    ],
+    states: [
+      { name: "closed", description: "Only the trigger is shown." },
+      { name: "open", description: "Card appears after the open delay on hover or focus." },
+    ],
+    usage: {
+      do: [
+        "Use for supplementary previews (user cards, link previews) that are nice-to-have.",
+        "Ensure the underlying content is reachable without hover.",
+      ],
+      dont: [
+        "Don't put essential or interactive-only content behind hover — it's not reliably reachable on touch.",
+      ],
+    },
+    a11y: [
+      "Opens on focus as well as hover, but treat its content as non-essential (touch users may not trigger it).",
+      "Not a replacement for a Tooltip's accessible name.",
+    ],
+    tokens: [
+      { token: "bg-popover / text-popover-foreground", role: "card surface + text" },
+    ],
+  },
+
+  tooltip: {
+    overview:
+      "A small label that appears on hover/focus to describe an element. Built on Radix Tooltip; requires a TooltipProvider ancestor.",
+    anatomy: [
+      "TooltipProvider — wraps the app/section, sharing delay config.",
+      "Tooltip — a single tooltip instance.",
+      "TooltipTrigger — the element being described.",
+      "TooltipContent — the floating label (bg-foreground / text-background) with an arrow.",
+    ],
+    props: [
+      { name: "delayDuration", type: "number", default: "0–700", description: "ms before showing (set on Provider or Tooltip)." },
+      { name: "side (content)", type: '"top" | "right" | "bottom" | "left"', default: '"top"', description: "Preferred side." },
+    ],
+    states: [
+      { name: "closed", description: "Only the trigger is shown." },
+      { name: "open", description: "Label appears on hover or keyboard focus after the delay." },
+    ],
+    usage: {
+      do: [
+        "Use to name or clarify icon-only controls.",
+        "Keep the text to a short phrase.",
+        "Wrap usages in a TooltipProvider.",
+      ],
+      dont: [
+        "Don't put essential information or interactive elements in a tooltip.",
+        "Don't rely on a tooltip as the only label for a control that needs an accessible name — also set aria-label.",
+      ],
+    },
+    a11y: [
+      "Shows on focus as well as hover; dismissible with Esc.",
+      "Content is short and supplementary; pair icon buttons with a real aria-label too.",
+    ],
+    tokens: [
+      { token: "bg-foreground / text-background", role: "tooltip surface + text (inverted)" },
+      { token: "fill-foreground", role: "arrow" },
+    ],
+  },
+
+  "dropdown-menu": {
+    overview:
+      "A menu of actions and options triggered by a button — with items, checkbox/radio items, labels, separators, shortcuts, and submenus. Built on Radix DropdownMenu.",
+    anatomy: [
+      "DropdownMenu — the stateful root; DropdownMenuTrigger opens it.",
+      "DropdownMenuContent — the floating menu (bg-popover).",
+      "DropdownMenuItem — an action; DropdownMenuShortcut shows a hint.",
+      "DropdownMenuCheckboxItem / DropdownMenuRadioGroup + RadioItem — stateful items.",
+      "DropdownMenuLabel / DropdownMenuSeparator / DropdownMenuGroup — organisation.",
+      "DropdownMenuSub + SubTrigger + SubContent — nested submenus.",
+    ],
+    props: [
+      { name: "open", type: "boolean", description: "Controlled open state (on root)." },
+      { name: "onOpenChange", type: "(open: boolean) => void", description: "Fires when open changes." },
+      { name: "variant (item)", type: '"default" | "destructive"', default: '"default"', description: "destructive items render in destructive color." },
+      { name: "inset (item/label)", type: "boolean", description: "Adds left padding to align with checkbox/radio items." },
+    ],
+    variants: ["item variant: default · destructive"],
+    states: [
+      { name: "closed", description: "Only the trigger is present." },
+      { name: "open", description: "Menu animates in; first item is focused." },
+      { name: "highlighted", description: "Hovered/arrow-focused item → bg-accent." },
+      { name: "destructive", description: "variant=destructive items → text-destructive, bg-destructive/10 on highlight." },
+    ],
+    usage: {
+      do: [
+        "Use for a list of actions tied to a button (row actions, account menus).",
+        "Group related items with labels and separators.",
+        "Mark dangerous items with variant=destructive.",
+      ],
+      dont: [
+        "Don't use for site navigation — use Navigation Menu.",
+        "Don't use for selecting a form value — use Select.",
+      ],
+    },
+    a11y: [
+      "role=menu with full keyboard support (arrows, typeahead, Esc, submenu open/close).",
+      "Focus is managed within the menu and restored to the trigger on close.",
+    ],
+    tokens: [
+      { token: "bg-popover / text-popover-foreground", role: "menu surface" },
+      { token: "bg-accent / text-accent-foreground", role: "highlighted item" },
+      { token: "text-destructive / bg-destructive/10", role: "destructive item" },
+      { token: "bg-border", role: "separator" },
+      { token: "text-muted-foreground", role: "labels / shortcuts" },
+    ],
+  },
+
+  "context-menu": {
+    overview:
+      "A menu of actions opened by right-click (or long-press) on a target area. Same item vocabulary as Dropdown Menu, built on Radix ContextMenu.",
+    anatomy: [
+      "ContextMenu — the stateful root; ContextMenuTrigger is the right-clickable area.",
+      "ContextMenuContent — the floating menu.",
+      "ContextMenuItem / CheckboxItem / RadioItem, Label, Separator, Shortcut, Sub*.",
+    ],
+    props: [
+      { name: "onOpenChange", type: "(open: boolean) => void", description: "Fires when open changes." },
+      { name: "variant (item)", type: '"default" | "destructive"', default: '"default"', description: "Destructive item color." },
+      { name: "inset (item/label)", type: "boolean", description: "Left padding to align with stateful items." },
+    ],
+    variants: ["item variant: default · destructive"],
+    states: [
+      { name: "closed", description: "No menu; the trigger area awaits right-click." },
+      { name: "open", description: "Menu appears at the pointer; keyboard navigable." },
+      { name: "highlighted", description: "Focused item → bg-accent." },
+      { name: "destructive", description: "Destructive items → text-destructive." },
+    ],
+    usage: {
+      do: [
+        "Use for power-user shortcuts on a specific surface (canvas, table row).",
+        "Mirror the most important actions elsewhere too (not everyone right-clicks).",
+      ],
+      dont: [
+        "Don't hide essential actions only behind a context menu.",
+        "Don't use where a visible button/menu is expected.",
+      ],
+    },
+    a11y: [
+      "role=menu; opens via context-menu key as well as right-click; full keyboard navigation.",
+      "Because discovery is low, duplicate critical actions in a visible control.",
+    ],
+    tokens: [
+      { token: "bg-popover / text-popover-foreground", role: "menu surface" },
+      { token: "bg-accent / text-accent-foreground", role: "highlighted item" },
+      { token: "text-destructive / bg-destructive/10", role: "destructive item" },
+      { token: "bg-border", role: "separator" },
+    ],
+  },
+
+  menubar: {
+    overview:
+      "A persistent horizontal bar of top-level menus, like a desktop application menu bar. Built on Radix Menubar.",
+    anatomy: [
+      "Menubar — the bar container.",
+      "MenubarMenu — one top-level menu; MenubarTrigger is its label.",
+      "MenubarContent — the dropdown for that menu.",
+      "MenubarItem / CheckboxItem / RadioItem, Label, Separator, Shortcut, Sub*.",
+    ],
+    props: [
+      { name: "value", type: "string", description: "Controlled open-menu value (on Menubar)." },
+      { name: "onValueChange", type: "(value: string) => void", description: "Fires when the open menu changes." },
+      { name: "inset (item/label)", type: "boolean", description: "Left padding alignment." },
+    ],
+    states: [
+      { name: "default", description: "Bar visible, all menus closed." },
+      { name: "open", description: "A trigger is active (bg-accent); its content is shown." },
+      { name: "highlighted", description: "Focused item → bg-accent." },
+    ],
+    usage: {
+      do: [
+        "Use for app-like products with many grouped commands (editors, dashboards).",
+        "Keep top-level labels short and conventional (File, Edit, View).",
+      ],
+      dont: [
+        "Don't use for simple sites — a single Dropdown Menu or nav is enough.",
+      ],
+    },
+    a11y: [
+      "role=menubar; arrow keys move between menus/items, Esc closes, typeahead supported.",
+      "Hovering one open menu moves focus across the bar as expected.",
+    ],
+    tokens: [
+      { token: "bg-background", role: "bar surface" },
+      { token: "bg-popover / text-popover-foreground", role: "menu content" },
+      { token: "bg-accent / text-accent-foreground", role: "active trigger / highlighted item" },
+      { token: "bg-border", role: "separator" },
+    ],
+  },
+
+  command: {
+    overview:
+      "A fast, composable command palette for searching and running actions, built on cmdk. Render inline or inside CommandDialog for a ⌘K palette.",
+    anatomy: [
+      "Command — the root list with built-in filtering.",
+      "CommandInput — the search field.",
+      "CommandList — scrollable results; CommandEmpty for no matches.",
+      "CommandGroup — labelled section; CommandItem — a runnable result; CommandShortcut — a hint.",
+      "CommandSeparator — divider; CommandDialog — wraps Command in a modal palette.",
+    ],
+    props: [
+      { name: "value", type: "string", description: "Controlled highlighted value." },
+      { name: "onValueChange", type: "(value: string) => void", description: "Fires when the highlight changes." },
+      { name: "filter", type: "(value, search) => number", description: "Custom scoring function for filtering." },
+      { name: "open (CommandDialog)", type: "boolean", description: "Open state when used as a modal palette." },
+    ],
+    states: [
+      { name: "default", description: "Input empty; full list shown." },
+      { name: "filtering", description: "Typing narrows results live." },
+      { name: "highlighted", description: "Active item → bg-accent." },
+      { name: "empty", description: "CommandEmpty message when nothing matches." },
+    ],
+    usage: {
+      do: [
+        "Use for global search/command palettes (⌘K) and as the body of a Combobox.",
+        "Group actions and provide a clear CommandEmpty state.",
+        "Show shortcuts with CommandShortcut.",
+      ],
+      dont: [
+        "Don't use for a small fixed set of options — use a Select or menu.",
+      ],
+    },
+    a11y: [
+      "Provides combobox/listbox semantics with full keyboard support (type, arrows, Enter, Esc).",
+      "When used in CommandDialog, focus is trapped like a Dialog.",
+    ],
+    tokens: [
+      { token: "bg-popover / text-popover-foreground", role: "palette surface" },
+      { token: "bg-accent / text-accent-foreground", role: "highlighted item" },
+      { token: "text-muted-foreground", role: "input placeholder / group labels" },
+      { token: "bg-border", role: "separator" },
+    ],
+  },
+
+  "navigation-menu": {
+    overview:
+      "A site navigation header with optional rich dropdown panels and an animated viewport/indicator. Built on Radix NavigationMenu.",
+    anatomy: [
+      "NavigationMenu — the root; NavigationMenuList holds the items.",
+      "NavigationMenuItem — a top-level entry.",
+      "NavigationMenuTrigger — opens a content panel; NavigationMenuLink — a plain link.",
+      "NavigationMenuContent — the dropdown panel; NavigationMenuViewport renders it; NavigationMenuIndicator points at the active item.",
+    ],
+    props: [
+      { name: "value", type: "string", description: "Controlled active item (on root)." },
+      { name: "onValueChange", type: "(value: string) => void", description: "Fires when the active item changes." },
+      { name: "viewport", type: "boolean", default: "true", description: "Render content in a shared animated viewport." },
+    ],
+    states: [
+      { name: "default", description: "Links/triggers in the bar." },
+      { name: "open", description: "A trigger's content panel is shown in the viewport." },
+      { name: "active", description: "Current item highlighted (bg-accent / bg-accent/50)." },
+      { name: "focus-visible", description: "ring-ring/50 on links/triggers." },
+    ],
+    usage: {
+      do: [
+        "Use for primary site navigation with grouped or featured links.",
+        "Use NavigationMenuLink (real anchors) so navigation stays accessible.",
+        "Keep panels scannable.",
+      ],
+      dont: [
+        "Don't use for in-app action menus — use Dropdown Menu / Menubar.",
+        "Don't put non-navigation actions in it.",
+      ],
+    },
+    a11y: [
+      "Real links underpin navigation; keyboard and screen-reader friendly.",
+      "Panels open on interaction and close on Esc/blur; the indicator conveys the active item beyond color via focus.",
+    ],
+    tokens: [
+      { token: "bg-background", role: "bar surface" },
+      { token: "bg-popover / text-popover-foreground", role: "dropdown panel" },
+      { token: "bg-accent / bg-accent/50 / text-accent-foreground", role: "active / hovered item" },
+      { token: "ring-ring/50", role: "focus ring" },
+      { token: "text-muted-foreground", role: "secondary text" },
+    ],
+  },
 }
