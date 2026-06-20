@@ -19,7 +19,7 @@ We are doing **all ~55 components**, not just 3 — batched by the Storybook sid
 | Deliverable | Status |
 |---|---|
 | 1 — Design Component | ✅ Done — all components token-driven, variants/states present, **a11y 0 violations** |
-| 2 — Component Documentation | 🚧 In progress — architecture done; **content 38/54 written** (see batches) |
+| 2 — Component Documentation | ✅ Done — **all 54/54 components documented** |
 | 3 — Into Storybook | ✅ Done — config, 55 CSF story files, autodocs on all, a11y addon green; docs page wired (lights up as deliverable-2 batches fill) |
 
 ### Deliverable 2 — documentation batches
@@ -29,7 +29,7 @@ We are doing **all ~55 components**, not just 3 — batched by the Storybook sid
 | **Forms** (19) | 19 ✅ all done | — |
 | **Overlays** (12) | 12 ✅ all done | — |
 | **Feedback** (7) | 7 ✅ all done | — |
-| **Data Display** (16) | 0 | all 16 |
+| **Data Display** (16) | 16 ✅ all done | — |
 
 ## How the documentation system works (single source → two renderers)
 
@@ -53,10 +53,10 @@ Note: `tsconfig.json` excludes `**/*.stories.tsx` from the Next build (stories a
 
 ## Next steps
 
-1. **Forms** ✅ (19/19). **Overlays** ✅ (12/12). **Feedback** ✅ (7/7).
-2. Next: **Data Display** (16) → add entries to `lib/component-details.ts`.
-3. (Optional, score) add `argTypes`/controls to the hand-authored `components/ui/*.stories.tsx` beyond the current few.
-4. Commit at each batch boundary.
+1. ✅ All documentation batches done — Forms (19), Overlays (12), Feedback (7), Data Display (16) = **54/54**.
+2. (Optional, score) add `argTypes`/controls to the hand-authored `components/ui/*.stories.tsx` beyond the current few.
+3. (Optional) commit the user's separate docs-site pile (token pages, registry.ts, site-header, app/layout, CLAUDE.md, figma-rest-api).
+4. Push remaining local commits when ready.
 
 ## Done earlier (context)
 

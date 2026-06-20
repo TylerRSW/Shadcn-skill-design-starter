@@ -1683,4 +1683,601 @@ export const componentDetails: Record<string, ComponentDetail> = {
       { token: "text-primary", role: "media icon / link accent" },
     ],
   },
+
+  // ── Data Display ───────────────────────────────────────────────────────────
+  table: {
+    overview:
+      "A styled set of primitives for rendering tabular data with header, body, footer, and caption. Composable, semantic HTML table elements.",
+    anatomy: [
+      "Table — the scroll-wrapped <table>.",
+      "TableHeader / TableBody / TableFooter — the <thead>/<tbody>/<tfoot> sections.",
+      "TableRow — a row; TableHead — a header cell; TableCell — a data cell.",
+      "TableCaption — an accessible caption describing the table.",
+    ],
+    props: [
+      { name: "...props", type: "React.ComponentProps of the matching element", description: "Each part forwards native attributes to its <table>/<tr>/<td> element." },
+    ],
+    states: [
+      { name: "default", description: "Header row with muted text; rows separated by borders." },
+      { name: "hover", description: "Row hover → bg-muted/50." },
+      { name: "selected", description: "data-state=selected rows can read bg-muted." },
+    ],
+    usage: {
+      do: [
+        "Use real table elements for tabular data so semantics and screen-reader navigation work.",
+        "Add a TableCaption (or aria-label) describing the table.",
+        "Use TableHead for column headers.",
+      ],
+      dont: [
+        "Don't use a table purely for layout.",
+        "Don't fake rows with divs when data is tabular.",
+      ],
+    },
+    a11y: [
+      "Native table semantics give row/column navigation in screen readers.",
+      "Provide a caption/label; mark header cells with TableHead (th).",
+    ],
+    tokens: [
+      { token: "bg-muted", role: "selected row / header surface" },
+      { token: "bg-muted/50", role: "row hover" },
+      { token: "text-foreground / text-muted-foreground", role: "cell text / header text" },
+    ],
+  },
+
+  "data-table": {
+    overview:
+      "A fuller table layout composed from the Table primitives — header, body, footer (e.g. totals), and caption — for displaying structured rows of data. Build it from Table parts; add sorting/filtering/pagination as needed.",
+    anatomy: [
+      "Built from Table + TableHeader/Body/Footer + TableRow + TableHead/Cell + TableCaption.",
+      "Header row for columns, body rows for data, footer for summary/totals, caption for context.",
+    ],
+    props: [
+      { name: "(composition)", type: "—", description: "No dedicated component. Map your data to TableRow/TableCell; wire sorting/pagination via your own state or a table library." },
+    ],
+    states: [
+      { name: "default", description: "Rendered rows with hover/selected states from Table." },
+      { name: "empty", description: "Pair with an Empty state when there are no rows." },
+    ],
+    usage: {
+      do: [
+        "Reuse the Table primitives for consistent styling.",
+        "Add a caption/label and clear column headers.",
+        "Show an Empty state when there's no data.",
+      ],
+      dont: [
+        "Don't reinvent table styling — compose from Table.",
+        "Don't paginate without keeping headers and context visible.",
+      ],
+    },
+    a11y: [
+      "Inherits native table semantics from the Table primitives.",
+      "Keep header cells as TableHead and provide a caption/label.",
+    ],
+    tokens: [
+      { token: "bg-muted / bg-muted/50", role: "header / row hover (via Table)" },
+      { token: "text-muted-foreground", role: "header & caption text" },
+    ],
+  },
+
+  card: {
+    overview:
+      "A surface that groups related content and actions — header, content, and footer — into a bordered container.",
+    anatomy: [
+      "Card — the bordered surface (bg-card).",
+      "CardHeader — wraps CardTitle, CardDescription, and an optional CardAction.",
+      "CardContent — the main body.",
+      "CardFooter — actions or meta at the bottom.",
+    ],
+    props: [
+      { name: "...props", type: 'React.ComponentProps<"div">', description: "Native div attributes on each part." },
+    ],
+    states: [
+      { name: "default", description: "Static surface; interactivity comes from controls inside." },
+    ],
+    usage: {
+      do: [
+        "Group related information and its actions in one card.",
+        "Use CardTitle/CardDescription for a clear heading.",
+        "Place primary actions in CardFooter or CardAction.",
+      ],
+      dont: [
+        "Don't nest cards deeply.",
+        "Don't make the whole card a click target without a real link/button inside.",
+      ],
+    },
+    a11y: [
+      "A container, not a control — ensure interactive elements inside are proper buttons/links.",
+      "Use a real heading element for CardTitle where it aids the document outline.",
+    ],
+    tokens: [
+      { token: "bg-card / text-card-foreground", role: "card surface + text" },
+      { token: "text-muted-foreground", role: "description" },
+    ],
+  },
+
+  avatar: {
+    overview:
+      "A user/entity image with a text fallback, supporting status badges and stacked groups. Built on Radix Avatar.",
+    anatomy: [
+      "Avatar — the rounded container.",
+      "AvatarImage — the photo (hidden until loaded).",
+      "AvatarFallback — initials/icon shown while loading or on error.",
+      "AvatarBadge — a small status indicator; AvatarGroup / AvatarGroupCount — overlapping stacks with an overflow count.",
+    ],
+    props: [
+      { name: "...props (Avatar)", type: "React.ComponentProps<typeof AvatarPrimitive.Root>", description: "Size via className (e.g. size-10)." },
+      { name: "src / alt (AvatarImage)", type: "string", description: "Image source and alt text." },
+      { name: "delayMs (AvatarFallback)", type: "number", description: "Delay before showing the fallback to avoid flicker." },
+    ],
+    states: [
+      { name: "loading", description: "AvatarFallback (bg-muted) shown until the image loads." },
+      { name: "loaded", description: "AvatarImage replaces the fallback." },
+      { name: "error", description: "Fallback remains if the image fails." },
+    ],
+    usage: {
+      do: [
+        "Provide meaningful alt text (or initials) for the person/entity.",
+        "Use AvatarGroup with a count for overflow.",
+        "Convey status with AvatarBadge plus a label, not color alone.",
+      ],
+      dont: [
+        "Don't leave AvatarImage without alt.",
+        "Don't rely on the image always loading — keep a fallback.",
+      ],
+    },
+    a11y: [
+      "AvatarImage needs alt; the fallback provides a text alternative.",
+      "Note: fallback text uses --muted-foreground — a documented Figma-fidelity contrast exception.",
+    ],
+    tokens: [
+      { token: "bg-muted / text-muted-foreground", role: "fallback surface + initials" },
+      { token: "bg-primary / text-primary-foreground", role: "badge / accent" },
+      { token: "ring-background", role: "ring separating stacked avatars" },
+    ],
+  },
+
+  accordion: {
+    overview:
+      "Vertically stacked headers that each expand to reveal a section of content. Built on Radix Accordion.",
+    anatomy: [
+      "Accordion — the root (type single or multiple).",
+      "AccordionItem — one header+panel pair.",
+      "AccordionTrigger — the clickable header (chevron rotates when open).",
+      "AccordionContent — the collapsible panel.",
+    ],
+    props: [
+      { name: "type", type: '"single" | "multiple"', description: "Whether one or many items can be open." },
+      { name: "collapsible", type: "boolean", description: "For single: allow closing the open item." },
+      { name: "value / defaultValue", type: "string | string[]", description: "Controlled / initial open item(s)." },
+      { name: "onValueChange", type: "(value) => void", description: "Fires when open items change." },
+    ],
+    variants: ["type: single · multiple"],
+    states: [
+      { name: "collapsed", description: "Panel hidden; chevron down." },
+      { name: "expanded", description: "data-state=open → panel revealed, chevron rotated." },
+      { name: "focus-visible", description: "Trigger shows border-ring + ring-ring/50." },
+    ],
+    usage: {
+      do: [
+        "Use to declutter long content into scannable sections (e.g. FAQs).",
+        "Use type=single for one-at-a-time, multiple for independent panels.",
+      ],
+      dont: [
+        "Don't hide critical content users need at a glance.",
+        "Don't nest accordions deeply.",
+      ],
+    },
+    a11y: [
+      "Triggers are buttons with aria-expanded controlling their panels.",
+      "Keyboard: Enter/Space toggles, arrows move between headers.",
+    ],
+    tokens: [
+      { token: "border-ring · ring-ring/50", role: "trigger focus ring" },
+      { token: "text-muted-foreground", role: "chevron icon" },
+    ],
+  },
+
+  collapsible: {
+    overview:
+      "A single trigger that expands/collapses one panel of content. The primitive behind accordions; built on Radix Collapsible.",
+    anatomy: [
+      "Collapsible — the root.",
+      "CollapsibleTrigger — toggles open/closed.",
+      "CollapsibleContent — the panel that shows/hides.",
+    ],
+    props: [
+      { name: "open", type: "boolean", description: "Controlled open state." },
+      { name: "defaultOpen", type: "boolean", description: "Uncontrolled initial state." },
+      { name: "onOpenChange", type: "(open: boolean) => void", description: "Fires on toggle." },
+      { name: "disabled", type: "boolean", description: "Disables toggling." },
+    ],
+    states: [
+      { name: "closed", description: "Content hidden (data-state=closed)." },
+      { name: "open", description: "Content revealed (data-state=open)." },
+    ],
+    usage: {
+      do: [
+        "Use to show/hide a single optional region (e.g. 'show more').",
+        "Style the trigger so its expanded/collapsed state is clear.",
+      ],
+      dont: [
+        "Don't use for a set of sections — use Accordion.",
+      ],
+    },
+    a11y: [
+      "Trigger exposes aria-expanded and controls the content region.",
+      "Keyboard toggling via Enter/Space.",
+    ],
+    tokens: [
+      { token: "(inherits from the trigger/content you compose)", role: "no dedicated tokens" },
+    ],
+  },
+
+  carousel: {
+    overview:
+      "A horizontally (or vertically) scrolling set of slides with previous/next controls and swipe support. Built on Embla Carousel.",
+    anatomy: [
+      "Carousel — the root managing the Embla instance and orientation.",
+      "CarouselContent — the track; CarouselItem — each slide.",
+      "CarouselPrevious / CarouselNext — navigation buttons.",
+    ],
+    props: [
+      { name: "orientation", type: '"horizontal" | "vertical"', default: '"horizontal"', description: "Scroll axis." },
+      { name: "opts", type: "EmblaOptionsType", description: "Embla options (loop, align, …)." },
+      { name: "setApi", type: "(api) => void", description: "Access the Embla API for custom control." },
+    ],
+    variants: ["orientation: horizontal · vertical"],
+    states: [
+      { name: "default", description: "Current slide shown; prev/next enable per position." },
+      { name: "start / end", description: "Prev or Next disabled at the boundaries (non-loop)." },
+    ],
+    usage: {
+      do: [
+        "Use for browsable galleries or featured sets.",
+        "Keep prev/next buttons visible and labelled.",
+        "Consider loop/auto-advance carefully.",
+      ],
+      dont: [
+        "Don't put essential content only in later slides.",
+        "Don't auto-advance without a pause control.",
+      ],
+    },
+    a11y: [
+      "Embla provides keyboard support; prev/next are real buttons (label them).",
+      "The carousel is exposed as a labelled region/roledescription so AT can navigate; avoid motion that ignores reduced-motion.",
+    ],
+    tokens: [
+      { token: "(prev/next inherit Button outline tokens)", role: "navigation buttons via Button" },
+    ],
+  },
+
+  chart: {
+    overview:
+      "A theming wrapper around Recharts that wires your data into token-driven containers, tooltips, and legends. You supply the Recharts chart; Chart handles colors and theming.",
+    anatomy: [
+      "ChartContainer — wraps a Recharts chart, injecting the color config as CSS vars.",
+      "ChartTooltip + ChartTooltipContent — themed tooltip.",
+      "ChartLegend + ChartLegendContent — themed legend.",
+      "config — maps each series key to a label and a token-based color.",
+    ],
+    props: [
+      { name: "config", type: "ChartConfig", description: "Per-series { label, color, icon }; colors should be tokens / CSS vars." },
+      { name: "children", type: "React.ReactElement", description: "A Recharts chart (Bar/Line/Area/Pie…)." },
+    ],
+    states: [
+      { name: "default", description: "Renders the chart with themed grid/axes/series." },
+      { name: "hover", description: "ChartTooltipContent shows the focused datum." },
+    ],
+    usage: {
+      do: [
+        "Drive series colors from the config using tokens / CSS vars.",
+        "Provide labels in config for accessible tooltips/legends.",
+        "Use the provided tooltip/legend content for consistent theming.",
+      ],
+      dont: [
+        "Don't hardcode hex colors in the chart — use the config + tokens.",
+        "Don't rely on color alone to distinguish series; add labels.",
+      ],
+    },
+    a11y: [
+      "Provide text labels and a summary; charts are hard for AT — consider a data table alternative.",
+      "Tooltips/legends use config labels so values are readable.",
+    ],
+    tokens: [
+      { token: "bg-background / border-border/50", role: "tooltip surface" },
+      { token: "fill-muted / fill-muted-foreground", role: "grid / axis fills" },
+      { token: "text-foreground / text-muted-foreground", role: "labels / secondary text" },
+      { token: "--color-<key> (from config)", role: "per-series colors mapped to tokens" },
+    ],
+  },
+
+  pagination: {
+    overview:
+      "Navigation for paged content — previous/next plus numbered page links and an ellipsis for gaps. Renders as a labelled nav of links.",
+    anatomy: [
+      "Pagination — a <nav> labelled for assistive tech.",
+      "PaginationContent — the list; PaginationItem — each entry.",
+      "PaginationLink — a page link (isActive marks the current page).",
+      "PaginationPrevious / PaginationNext — directional links; PaginationEllipsis — overflow gap.",
+    ],
+    props: [
+      { name: "isActive (PaginationLink)", type: "boolean", description: "Marks the current page (aria-current=page)." },
+      { name: "size", type: '"default" | "sm" | "lg" | "icon"', description: "Link sizing (via buttonVariants)." },
+      { name: "...props", type: "anchor attributes", description: "href and link attributes pass through." },
+    ],
+    states: [
+      { name: "default", description: "Page links in a row." },
+      { name: "active", description: "Current page styled and marked aria-current." },
+      { name: "boundary", description: "Prev/Next at first/last page." },
+    ],
+    usage: {
+      do: [
+        "Mark the current page with isActive (sets aria-current).",
+        "Use the ellipsis for large page counts.",
+        "Use real links so pages are navigable/bookmarkable.",
+      ],
+      dont: [
+        "Don't show every page number for huge sets — collapse with ellipsis.",
+      ],
+    },
+    a11y: [
+      "Wrapped in a labelled nav; current page exposes aria-current=page.",
+      "Prev/Next links carry accessible names even when icon-only.",
+    ],
+    tokens: [
+      { token: "(links inherit buttonVariants ghost/outline tokens)", role: "page links via Button styles" },
+    ],
+  },
+
+  breadcrumb: {
+    overview:
+      "Shows the path to the current page as a hierarchy of links, ending in the current page. Renders as a labelled nav.",
+    anatomy: [
+      "Breadcrumb — a <nav aria-label=\"breadcrumb\">.",
+      "BreadcrumbList — the ordered list; BreadcrumbItem — each step.",
+      "BreadcrumbLink — a link to an ancestor; BreadcrumbPage — the current page (non-link).",
+      "BreadcrumbSeparator — between items; BreadcrumbEllipsis — collapsed middle.",
+    ],
+    props: [
+      { name: "...props", type: "list/anchor attributes", description: "Native attributes on each part; BreadcrumbLink takes href." },
+    ],
+    states: [
+      { name: "default", description: "Ancestor links + separators." },
+      { name: "current", description: "BreadcrumbPage marks the current location (aria-current=page)." },
+    ],
+    usage: {
+      do: [
+        "Use for deep hierarchies so users can navigate up.",
+        "Mark the last item as BreadcrumbPage (not a link).",
+        "Collapse long trails with BreadcrumbEllipsis.",
+      ],
+      dont: [
+        "Don't use breadcrumbs for flat sites or as primary navigation.",
+      ],
+    },
+    a11y: [
+      "nav is labelled 'breadcrumb'; the current page uses aria-current=page.",
+      "Separators are decorative (aria-hidden).",
+    ],
+    tokens: [
+      { token: "text-muted-foreground", role: "ancestor links / separators" },
+      { token: "text-foreground", role: "current page" },
+    ],
+  },
+
+  tabs: {
+    overview:
+      "Switch between sibling panels of content within the same context, one visible at a time. Built on Radix Tabs.",
+    anatomy: [
+      "Tabs — the root holding the active value.",
+      "TabsList — the row of tab buttons (bg-muted).",
+      "TabsTrigger — one tab; the active one is highlighted.",
+      "TabsContent — the panel tied to a tab value.",
+    ],
+    props: [
+      { name: "value / defaultValue", type: "string", description: "Controlled / initial active tab." },
+      { name: "onValueChange", type: "(value: string) => void", description: "Fires when the tab changes." },
+      { name: "orientation", type: '"horizontal" | "vertical"', default: '"horizontal"', description: "Tab list direction." },
+    ],
+    variants: ["orientation: horizontal · vertical"],
+    states: [
+      { name: "inactive", description: "text-foreground/60 trigger." },
+      { name: "active", description: "data-state=active → raised trigger (bg-background) and its panel shown." },
+      { name: "focus-visible", description: "border-ring + ring-ring/50." },
+    ],
+    usage: {
+      do: [
+        "Use for switching between related views in one place.",
+        "Keep tab labels short and parallel.",
+      ],
+      dont: [
+        "Don't use tabs for sequential steps — use a stepper/wizard.",
+        "Don't hide content users need to compare side by side.",
+      ],
+    },
+    a11y: [
+      "role=tablist/tab/tabpanel with arrow-key navigation and aria-selected.",
+      "Each panel is associated with its tab; focus management is handled by Radix.",
+    ],
+    tokens: [
+      { token: "bg-muted", role: "tab list surface" },
+      { token: "bg-background / text-foreground", role: "active trigger" },
+      { token: "text-foreground/60 / text-muted-foreground", role: "inactive trigger" },
+      { token: "border-ring · ring-ring/50", role: "focus ring" },
+    ],
+  },
+
+  separator: {
+    overview:
+      "A thin divider between content, horizontal or vertical. Built on Radix Separator.",
+    anatomy: [
+      "Separator — a 1px line (bg-border), oriented horizontally or vertically.",
+    ],
+    props: [
+      { name: "orientation", type: '"horizontal" | "vertical"', default: '"horizontal"', description: "Line direction." },
+      { name: "decorative", type: "boolean", default: "true", description: "If true, hidden from AT; set false when it carries meaning." },
+    ],
+    variants: ["orientation: horizontal · vertical"],
+    states: [
+      { name: "default", description: "A static hairline." },
+    ],
+    usage: {
+      do: [
+        "Use to separate groups of related content or controls.",
+        "Set decorative=false only when the divider is semantically meaningful.",
+      ],
+      dont: [
+        "Don't overuse dividers where spacing alone suffices.",
+      ],
+    },
+    a11y: [
+      "Decorative by default (aria-hidden); as a semantic separator it exposes role=separator.",
+    ],
+    tokens: [
+      { token: "bg-border", role: "divider line" },
+    ],
+  },
+
+  "aspect-ratio": {
+    overview:
+      "Constrains its child to a fixed width-to-height ratio (e.g. 16:9), keeping media responsive without layout shift. Built on Radix AspectRatio.",
+    anatomy: [
+      "AspectRatio — a wrapper that reserves space at the given ratio for its single child (image, video, embed).",
+    ],
+    props: [
+      { name: "ratio", type: "number", default: "1", description: "Width / height (e.g. 16 / 9)." },
+      { name: "...props", type: 'React.ComponentProps<"div">', description: "Native div attributes." },
+    ],
+    states: [
+      { name: "default", description: "Child fills the reserved ratio box." },
+    ],
+    usage: {
+      do: [
+        "Use for images, video, and embeds to prevent layout shift.",
+        "Make the child fill the box (object-cover for images).",
+      ],
+      dont: [
+        "Don't use it for arbitrary text blocks that shouldn't be ratio-locked.",
+      ],
+    },
+    a11y: [
+      "Layout-only — accessibility comes from the child (e.g. img alt, video captions).",
+    ],
+    tokens: [
+      { token: "(layout-only)", role: "no dedicated tokens" },
+    ],
+  },
+
+  "scroll-area": {
+    overview:
+      "A scrollable region with cross-browser, styled scrollbars. Built on Radix ScrollArea.",
+    anatomy: [
+      "ScrollArea — the viewport wrapper with a constrained size.",
+      "ScrollBar — the custom horizontal/vertical scrollbar (thumb uses bg-border).",
+    ],
+    props: [
+      { name: "type", type: '"auto" | "always" | "scroll" | "hover"', description: "When scrollbars are visible." },
+      { name: "...props", type: "React.ComponentProps<typeof ScrollAreaPrimitive.Root>", description: "Set the size via className; content scrolls within." },
+    ],
+    states: [
+      { name: "default", description: "Content scrolls; scrollbar appears per type." },
+      { name: "scrolling", description: "Thumb tracks the scroll position." },
+    ],
+    usage: {
+      do: [
+        "Use for constrained, scrollable lists/panels needing consistent scrollbar styling.",
+        "Keep keyboard scrolling/focus reachable for the content.",
+      ],
+      dont: [
+        "Don't wrap the whole page — use native document scrolling.",
+      ],
+    },
+    a11y: [
+      "Note: the viewport isn't tabbable by default (a documented axe exception); ensure focusable content inside remains reachable.",
+      "Don't trap keyboard users; native scroll keys should work.",
+    ],
+    tokens: [
+      { token: "bg-border", role: "scrollbar thumb" },
+      { token: "ring-ring/50", role: "focus ring" },
+    ],
+  },
+
+  item: {
+    overview:
+      "A flexible row container for list-like content — media, title, description, and actions — composable into separated groups. A building block for lists, settings rows, and option lists.",
+    anatomy: [
+      "ItemGroup — wraps multiple Items; ItemSeparator — divides them.",
+      "Item — one row (variant + size); ItemHeader / ItemFooter — optional row regions.",
+      "ItemMedia — leading icon/avatar; ItemContent — ItemTitle + ItemDescription.",
+      "ItemActions — trailing controls.",
+    ],
+    props: [
+      { name: "variant", type: '"default" | "outline" | "muted"', default: '"default"', description: "Row surface style." },
+      { name: "size", type: '"default" | "sm"', default: '"default"', description: "Row density." },
+      { name: "asChild", type: "boolean", description: "Render the row as a link/button while keeping layout." },
+    ],
+    variants: [
+      "variant: default · outline · muted",
+      "size: default · sm",
+    ],
+    states: [
+      { name: "default", description: "Static row." },
+      { name: "hover", description: "Interactive rows → bg-accent/50." },
+      { name: "focus-visible", description: "border-ring + ring-ring/50 when interactive." },
+    ],
+    usage: {
+      do: [
+        "Use for consistent list/settings rows with media, text, and actions.",
+        "Group with ItemGroup + ItemSeparator.",
+        "Make rows interactive via asChild (real link/button).",
+      ],
+      dont: [
+        "Don't put unrelated content in one Item.",
+        "Don't make a row clickable without a real control (asChild).",
+      ],
+    },
+    a11y: [
+      "When interactive, render as a real link/button (asChild) so it's focusable and labelled.",
+      "Use ItemTitle as the accessible label for the row's action.",
+    ],
+    tokens: [
+      { token: "bg-accent/50", role: "row hover" },
+      { token: "bg-muted / bg-muted/50", role: "muted variant surface" },
+      { token: "border-border", role: "outline variant / separators" },
+      { token: "border-ring · ring-ring/50", role: "focus ring" },
+      { token: "text-muted-foreground", role: "description" },
+    ],
+  },
+
+  kbd: {
+    overview:
+      "Displays keyboard keys and shortcut combinations as small key caps, groupable with KbdGroup.",
+    anatomy: [
+      "Kbd — a single key cap (e.g. ⌘, Esc).",
+      "KbdGroup — a sequence of keys forming a shortcut (⌘ + K).",
+    ],
+    props: [
+      { name: "...props", type: 'React.ComponentProps<"kbd">', description: "Native kbd attributes." },
+    ],
+    states: [
+      { name: "default", description: "A static key cap (bg-muted)." },
+    ],
+    usage: {
+      do: [
+        "Use to document keyboard shortcuts in menus, tooltips, and docs.",
+        "Group multi-key shortcuts with KbdGroup.",
+      ],
+      dont: [
+        "Don't use Kbd for non-keyboard labels.",
+      ],
+    },
+    a11y: [
+      "Uses the semantic <kbd> element.",
+      "Note: muted key text uses --muted-foreground — a documented Figma-fidelity contrast exception.",
+    ],
+    tokens: [
+      { token: "bg-muted / text-muted-foreground", role: "key cap surface + text" },
+      { token: "bg-background/10 / bg-background/20 / text-background", role: "key caps on inverted surfaces (e.g. tooltip)" },
+    ],
+  },
 }
