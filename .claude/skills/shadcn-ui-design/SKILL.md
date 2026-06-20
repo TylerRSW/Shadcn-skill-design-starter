@@ -27,7 +27,7 @@ Build production UI with shadcn/ui, Tailwind CSS v4, and Next.js App Router, usi
 | Styling | `tailwindcss` v4 |
 | Components | `shadcn/ui` |
 | Icons | `lucide-react` |
-| Forms | `react-hook-form` + `zod` |
+| Forms | `react-hook-form` + `zod` + `Field` |
 | Themes | `next-themes` |
 
 ---
@@ -48,12 +48,12 @@ Build production UI with shadcn/ui, Tailwind CSS v4, and Next.js App Router, usi
 - Never hand-write `components/ui/*` — install via `npx shadcn@latest add <name>`.
 - Never mix Tailwind v3 config (`tailwind.config.js` `theme.extend`) with v4 `@theme` CSS.
 - Never use inline `style={{ color: '...' }}` for design tokens.
-- Never omit `<FormMessage />` inside a `<FormField>`.
+- Never omit `<FieldError />` inside a validated `<Field>`.
 - Never use the TypeScript `any` type for form values — infer from the zod schema.
 - Never invent dark mode token values — they are not in the token file; define explicitly if needed.
 
 ### Accessibility
-- Every `<Input>` must have a paired `<FormLabel>` or `aria-label`.
+- Every `<Input>` must have a paired `<FieldLabel>` or `aria-label`.
 - Every icon-only button needs `<span className="sr-only">label</span>`.
 - Use `<DialogTitle>` + `<DialogDescription>` in every `<Dialog>`.
 - Radix UI handles keyboard nav — do not override `tabIndex` unless necessary.
@@ -70,7 +70,7 @@ Detects package manager, framework, style, and RSC mode.
 
 ### Step 2 — Decide: Server Component or Client Component?
 ```
-Uses hooks / events / browser APIs / next-themes / interactive shadcn (Dialog, Sheet, Form)?
+Uses hooks / events / browser APIs / next-themes / interactive shadcn (Dialog, Sheet, react-hook-form)?
   → add "use client"
 Otherwise → Server Component (no directive). This is the default.
 ```
@@ -92,7 +92,7 @@ Containers: `max-w-sm` (auth) · `max-w-2xl` (prose) · `max-w-4xl` (dashboard) 
 - **Typography**: `text-2xl font-semibold tracking-tight` (h2) · `text-base leading-6` (body) · `text-sm text-muted-foreground` (caption) · `text-sm font-medium` (label).
 
 ### Step 6 — Wire forms (if needed)
-Follow Form Pattern below. Always pair `react-hook-form` with a zod schema.
+Follow the Field Pattern below — shadcn's `Field` primitives + `react-hook-form` + a zod schema. (The older `Form`/`FormField` wrapper is deprecated in favor of `Field`.)
 
 ---
 
@@ -226,22 +226,24 @@ import { Badge } from "@/components/ui/badge"
 
 ---
 
-## Form Pattern
+## Field Pattern (forms)
+
+shadcn's `Field` primitives are the current way to lay out forms — the older `Form`/`FormField` wrapper is **deprecated**. Compose `Field` with `react-hook-form` + a zod schema. Exports: `Field`, `FieldGroup`, `FieldLabel`, `FieldDescription`, `FieldError`, `FieldSet`, `FieldLegend`, `FieldSeparator`, `FieldContent`, `FieldTitle`.
 
 ### Setup
 ```bash
 npm install react-hook-form zod @hookform/resolvers
-npx shadcn@latest add form input label textarea select checkbox
+npx shadcn@latest add field input label textarea select checkbox
 ```
 
-### Full example (react-hook-form + zod)
+### Full example (Field + react-hook-form + zod)
 ```tsx
 "use client"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
 const schema = z.object({
@@ -252,96 +254,77 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>
 
 export function LoginForm() {
-  const form = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { email: "", password: "" },
   })
 
-  function onSubmit(values: FormValues) {
-    console.log(values)
-  }
-
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="you@example.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
-              </FormControl>
-              <FormDescription>Must be at least 8 characters.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <form onSubmit={handleSubmit((values) => console.log(values))}>
+      <FieldGroup>
+        <Field>
+          <FieldLabel htmlFor="email">Email</FieldLabel>
+          <Input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            aria-invalid={!!errors.email}
+            {...register("email")}
+          />
+          <FieldError errors={[errors.email]} />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="password">Password</FieldLabel>
+          <Input
+            id="password"
+            type="password"
+            aria-invalid={!!errors.password}
+            {...register("password")}
+          />
+          <FieldDescription>Must be at least 8 characters.</FieldDescription>
+          <FieldError errors={[errors.password]} />
+        </Field>
         <Button type="submit" className="w-full">Sign in</Button>
-      </form>
-    </Form>
+      </FieldGroup>
+    </form>
   )
 }
 ```
 
 ### Select field
 ```tsx
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-<FormField
-  control={form.control}
-  name="role"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>Role</FormLabel>
-      <Select onValueChange={field.onChange} defaultValue={field.value}>
-        <FormControl>
-          <SelectTrigger><SelectValue placeholder="Select a role" /></SelectTrigger>
-        </FormControl>
-        <SelectContent>
-          <SelectItem value="admin">Admin</SelectItem>
-          <SelectItem value="user">User</SelectItem>
-          <SelectItem value="viewer">Viewer</SelectItem>
-        </SelectContent>
-      </Select>
-      <FormMessage />
-    </FormItem>
-  )}
-/>
+<Field>
+  <FieldLabel htmlFor="role">Role</FieldLabel>
+  <Select onValueChange={field.onChange} defaultValue={field.value}>
+    <SelectTrigger id="role"><SelectValue placeholder="Select a role" /></SelectTrigger>
+    <SelectContent>
+      <SelectItem value="admin">Admin</SelectItem>
+      <SelectItem value="user">User</SelectItem>
+      <SelectItem value="viewer">Viewer</SelectItem>
+    </SelectContent>
+  </Select>
+  <FieldError errors={[errors.role]} />
+</Field>
 ```
 
-### Checkbox field
+### Checkbox field (horizontal)
 ```tsx
 import { Checkbox } from "@/components/ui/checkbox"
+import { Field, FieldLabel } from "@/components/ui/field"
 
-<FormField
-  control={form.control}
-  name="acceptTerms"
-  render={({ field }) => (
-    <FormItem className="flex items-start gap-3">
-      <FormControl>
-        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-      </FormControl>
-      <FormLabel className="font-normal leading-snug">
-        I accept the terms and conditions
-      </FormLabel>
-    </FormItem>
-  )}
-/>
+<Field orientation="horizontal">
+  <Checkbox id="terms" checked={field.value} onCheckedChange={field.onChange} />
+  <FieldLabel htmlFor="terms" className="font-normal">
+    I accept the terms and conditions
+  </FieldLabel>
+</Field>
 ```
 
 ---
@@ -419,10 +402,26 @@ npx shadcn@latest info --json
 npx shadcn@latest search <query>
 npx shadcn@latest add <component> [--dry-run --diff]
 
-# Common components
-button card input label textarea select checkbox radio-group
-dialog sheet alert-dialog drawer popover tooltip
-form badge avatar separator skeleton table tabs dropdown-menu
+# All 55 components (install any: npx shadcn@latest add <name>)
+# Layout & containers
+accordion aspect-ratio card carousel collapsible scroll-area separator sidebar tabs
+# Forms & inputs
+button button-group checkbox field input input-group input-otp label native-select radio-group select slider switch textarea toggle toggle-group
+# Overlays & menus
+alert-dialog command context-menu dialog drawer dropdown-menu hover-card menubar popover sheet tooltip
+# Navigation
+breadcrumb navigation-menu pagination
+# Feedback & status
+alert badge empty progress skeleton sonner spinner
+# Data display
+avatar calendar chart combobox data-table date-picker item kbd table
+
+# Notes:
+#  - `form` is DEPRECATED → use `field` + react-hook-form (see Field Pattern).
+#  - combobox / date-picker / data-table are COMPOSITIONS (no single file):
+#      combobox    = popover + command
+#      date-picker = popover + calendar
+#      data-table  = table + @tanstack/react-table
 
 npm run dev | build | lint
 ```

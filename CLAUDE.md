@@ -27,11 +27,9 @@ Returns: framework, style, base library (Radix or Base UI), RSC mode, Tailwind v
 
 ## Figma source
 
-> **Not set yet — fill in when available.** Until then, ask the user for the Figma URL each time.
-
 ```
-Figma file key:   <FILE_KEY>          # from figma.com/design/<FILE_KEY>/...
-Default frame:    <NODE_ID>           # node-id with "-" converted to ":"
+Figma file key:   bqIgKm1lFHiFTtcc44aHhT          # from figma.com/design/<FILE_KEY>/...
+Default frame:    7033:403           # node-id with "-" converted to ":"
 Code Connect:     not configured
 ```
 
