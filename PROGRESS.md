@@ -4,6 +4,29 @@
 > Portable handoff doc — any session/account can read this + `git log` + `CLAUDE.md` and continue.
 > Last updated: 2026-06-20 (all deliverables done; repo fully committed + pushed at HEAD 17debc7).
 
+## Switching Claude accounts (token limit handoff)
+
+Two accounts on this machine share this repo: `claude-personal` and `claude-work`.
+Use these commands so work continues seamlessly. **6 steps:**
+
+**Before switching out (current account):**
+1. Type **`/save`**
+2. Wait for **"✅ pushed — safe to switch"**
+3. Press **Ctrl-D** to exit
+
+**Switch:**
+4. Type the alias (NOT bare `claude`): **`claude-work`**  (or **`claude-personal`** to come back)
+
+**Continue (new account):**
+5. Type **`/load`**
+6. Check the summary matches, then keep working
+
+**Iron rules:** ① never run both accounts at once · ② open with the alias only · ③ always `/save` and wait for "pushed" before exiting.
+
+Memory is shared between the two accounts (symlinked), so both see the same notes. The repo (this file + git) is the source of truth.
+
+---
+
 ## The assignment (3 deliverables)
 
 Pick ≥ 3 shadcn/ui components and:

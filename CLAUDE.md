@@ -2,6 +2,19 @@
 
 Loaded into Claude Code's system prompt on every session. This project builds **Next.js (App Router) UI with shadcn/ui + Tailwind CSS v4**, translating **Figma** designs into production code with strict 1:1 fidelity.
 
+## Multi-account workflow (handoff between Claude accounts)
+
+This repo is worked on from **two Claude accounts on the same machine**, switched when one hits its token limit:
+`claude-personal` (`CLAUDE_CONFIG_DIR=~/.claude-personal`) and `claude-work` (`CLAUDE_CONFIG_DIR=~/.claude-work`). Both use the **same project folder** and the **same git repo**, so working-tree files are shared automatically; only each account's *memory* differs (kept in sync via a symlinked shared memory dir).
+
+**The repo is the single source of truth.** `PROGRESS.md` is the canonical, portable status doc — read it at the start of every session and keep it current.
+
+Two handoff commands (defined in `.claude/commands/`):
+- **`/save`** — run before switching out: clean up, update `PROGRESS.md`, commit, push, then report. Wait for the "✅ pushed" report before the user exits.
+- **`/load`** — run after switching in: check status, pull if behind, read `PROGRESS.md`, report where we are and the next step.
+
+When the user says they are switching accounts / running low on tokens, proactively offer `/save`. See `PROGRESS.md` → "Switching Claude accounts" for the user-side checklist.
+
 ## Read first
 
 1. **[`.claude/skills/shadcn-ui-design/SKILL.md`](./.claude/skills/shadcn-ui-design/SKILL.md)** — the UI build workflow, rules, and recipes. Auto-discovered; full instructions load when UI work begins.
