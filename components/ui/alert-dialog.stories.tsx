@@ -13,8 +13,14 @@ const meta = {
   component: AlertDialog,
   parameters: { layout: "centered" },
   tags: ["autodocs"],
-  render: () => (
-    <AlertDialog>
+  argTypes: {
+    defaultOpen: {
+      control: "boolean",
+      description: "Open the alert dialog by default (uncontrolled).",
+    },
+  },
+  render: (args) => (
+    <AlertDialog defaultOpen={args.defaultOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="destructive">Delete</Button>
       </AlertDialogTrigger>

@@ -10,8 +10,15 @@ const meta = {
   component: Select,
   parameters: { layout: "centered" },
   tags: ["autodocs"],
-  render: () => (
-    <Select>
+  argTypes: {
+    disabled: {
+      control: "boolean",
+      description: "Disables the whole select.",
+      table: { defaultValue: { summary: "false" } },
+    },
+  },
+  render: (args) => (
+    <Select disabled={args.disabled}>
       <SelectTrigger className="w-48" aria-label="Pick a fruit">
         <SelectValue placeholder="Pick a fruit" />
       </SelectTrigger>

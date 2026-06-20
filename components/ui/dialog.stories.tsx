@@ -12,8 +12,19 @@ const meta = {
   component: Dialog,
   parameters: { layout: "centered" },
   tags: ["autodocs"],
-  render: () => (
-    <Dialog>
+  argTypes: {
+    defaultOpen: {
+      control: "boolean",
+      description: "Open the dialog by default (uncontrolled).",
+    },
+    modal: {
+      control: "boolean",
+      description: "Block interaction with content outside the dialog.",
+      table: { defaultValue: { summary: "true" } },
+    },
+  },
+  render: (args) => (
+    <Dialog defaultOpen={args.defaultOpen} modal={args.modal}>
       <DialogTrigger asChild>
         <Button>Open dialog</Button>
       </DialogTrigger>

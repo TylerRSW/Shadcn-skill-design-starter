@@ -9,6 +9,21 @@ const meta = {
   component: Checkbox,
   parameters: { layout: "centered" },
   tags: ["autodocs"],
+  argTypes: {
+    defaultChecked: {
+      control: "boolean",
+      description: "Uncontrolled initial checked state.",
+    },
+    disabled: {
+      control: "boolean",
+      description: "Disables the checkbox (not focusable, reduced opacity).",
+      table: { defaultValue: { summary: "false" } },
+    },
+    required: {
+      control: "boolean",
+      description: "Marks the checkbox as required in a form.",
+    },
+  },
   render: (args) => (
     <div className="flex items-center gap-2">
       <Checkbox id="terms" {...args} />

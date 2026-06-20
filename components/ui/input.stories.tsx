@@ -10,9 +10,18 @@ const meta = {
   parameters: { layout: "centered" },
   tags: ["autodocs"],
   argTypes: {
-    type: { control: "select", options: ["text", "email", "password", "number"] },
-    placeholder: { control: "text" },
-    disabled: { control: "boolean" },
+    type: {
+      control: "select",
+      options: ["text", "email", "password", "number", "search", "tel", "url"],
+      description: "Native input type — drives keyboard and validation.",
+      table: { defaultValue: { summary: "text" } },
+    },
+    placeholder: { control: "text", description: "Placeholder hint (not a label substitute)." },
+    disabled: {
+      control: "boolean",
+      description: "Disables the field.",
+      table: { defaultValue: { summary: "false" } },
+    },
   },
   args: { placeholder: "Email", type: "email" },
   render: (args) => <Input {...args} className="w-64" />,

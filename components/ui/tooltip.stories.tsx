@@ -8,9 +8,15 @@ const meta = {
   component: Tooltip,
   parameters: { layout: "centered" },
   tags: ["autodocs"],
-  render: () => (
+  argTypes: {
+    defaultOpen: {
+      control: "boolean",
+      description: "Show the tooltip open by default (uncontrolled).",
+    },
+  },
+  render: (args) => (
     <TooltipProvider>
-      <Tooltip>
+      <Tooltip defaultOpen={args.defaultOpen}>
         <TooltipTrigger asChild>
           <Button variant="outline">Hover me</Button>
         </TooltipTrigger>

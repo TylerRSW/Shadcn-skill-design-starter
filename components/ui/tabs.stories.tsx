@@ -8,8 +8,16 @@ const meta = {
   component: Tabs,
   parameters: { layout: "centered" },
   tags: ["autodocs"],
-  render: () => (
-    <Tabs defaultValue="account" className="w-80">
+  argTypes: {
+    orientation: {
+      control: "inline-radio",
+      options: ["horizontal", "vertical"],
+      description: "Tab list direction.",
+      table: { defaultValue: { summary: "horizontal" } },
+    },
+  },
+  render: (args) => (
+    <Tabs defaultValue="account" orientation={args.orientation} className="w-80">
       <TabsList>
         <TabsTrigger value="account">Account</TabsTrigger>
         <TabsTrigger value="password">Password</TabsTrigger>

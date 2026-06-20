@@ -11,7 +11,14 @@ const meta = {
     variant: {
       control: "select",
       options: ["default", "secondary", "destructive", "outline"],
+      description: "Visual style / emphasis.",
+      table: { defaultValue: { summary: "default" } },
     },
+    asChild: {
+      control: "boolean",
+      description: "Render as the child element (e.g. an <a>) while keeping badge styles.",
+    },
+    children: { control: "text", description: "Badge label." },
   },
   args: { children: "Badge" },
 } satisfies Meta<typeof Badge>

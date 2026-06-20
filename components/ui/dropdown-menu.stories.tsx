@@ -12,8 +12,14 @@ const meta = {
   component: DropdownMenu,
   parameters: { layout: "centered" },
   tags: ["autodocs"],
-  render: () => (
-    <DropdownMenu>
+  argTypes: {
+    defaultOpen: {
+      control: "boolean",
+      description: "Open the menu by default (uncontrolled).",
+    },
+  },
+  render: (args) => (
+    <DropdownMenu defaultOpen={args.defaultOpen}>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">Open menu</Button>
       </DropdownMenuTrigger>

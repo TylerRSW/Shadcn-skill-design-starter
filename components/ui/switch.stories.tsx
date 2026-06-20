@@ -9,6 +9,17 @@ const meta = {
   component: Switch,
   parameters: { layout: "centered" },
   tags: ["autodocs"],
+  argTypes: {
+    defaultChecked: {
+      control: "boolean",
+      description: "Uncontrolled initial on/off state.",
+    },
+    disabled: {
+      control: "boolean",
+      description: "Disables the switch.",
+      table: { defaultValue: { summary: "false" } },
+    },
+  },
   render: (args) => (
     <div className="flex items-center gap-2">
       <Switch id="airplane" {...args} />
