@@ -459,4 +459,455 @@ export const componentDetails: Record<string, ComponentDetail> = {
       { token: "ring-ring/50", role: "thumb focus/hover ring" },
     ],
   },
+
+  "button-group": {
+    overview:
+      "Connects related buttons (and text/separators) into a single control with shared borders and rounded outer edges. A layout wrapper — each child Button keeps its own behaviour.",
+    anatomy: [
+      "ButtonGroup — the role=group flex container (data-slot=\"button-group\"), horizontal or vertical.",
+      "Button — the action buttons placed inside; outer corners are rounded, inner edges squared.",
+      "ButtonGroupText — non-interactive inline text/label segment.",
+      "ButtonGroupSeparator — a divider between segments.",
+    ],
+    props: [
+      { name: "orientation", type: '"horizontal" | "vertical"', default: '"horizontal"', description: "Lays the group out in a row or a column." },
+      { name: "...props", type: 'React.ComponentProps<"div">', description: "All native div attributes; add aria-label to name the group." },
+    ],
+    variants: ["orientation: horizontal · vertical"],
+    states: [
+      { name: "default", description: "Each child renders its own Button variant/state." },
+      { name: "(per button)", description: "hover / focus-visible / disabled come from the child Buttons, not the group." },
+    ],
+    usage: {
+      do: [
+        "Group buttons that act on the same object or form a set of related choices.",
+        "Give the group an aria-label describing its purpose.",
+        "Mix in ButtonGroupText / ButtonGroupSeparator for split or labelled controls.",
+      ],
+      dont: [
+        "Don't group unrelated actions just to save space.",
+        "Don't mix wildly different button variants in one group.",
+      ],
+    },
+    a11y: [
+      "Exposes role=group — give it an accessible name (aria-label / aria-labelledby).",
+      "Each child Button keeps its own semantics, focus order, and labelling.",
+    ],
+    tokens: [
+      { token: "bg-input", role: "vertical separator hairline" },
+      { token: "bg-muted", role: "ButtonGroupText surface" },
+    ],
+  },
+
+  "input-group": {
+    overview:
+      "Wraps an input (or textarea) with leading/trailing addons — icons, buttons, or text — inside one bordered control that shares a single focus ring.",
+    anatomy: [
+      "InputGroup — the bordered container that owns the focus-within ring.",
+      "InputGroupInput / InputGroupTextarea — the borderless control inside.",
+      "InputGroupAddon — a slot aligned inline-start, inline-end, or block-end.",
+      "InputGroupButton — a compact button addon (e.g. submit, clear, reveal).",
+      "InputGroupText — static text/icon addon (e.g. a prefix or unit).",
+    ],
+    props: [
+      { name: "align (addon)", type: '"inline-start" | "inline-end" | "block-start" | "block-end"', default: '"inline-start"', description: "Where the addon sits within the group." },
+      { name: "size (button)", type: '"xs" | "sm" | "icon-xs" | "icon-sm"', description: "Compact sizing for InputGroupButton." },
+      { name: "...props", type: 'React.ComponentProps<"div">', description: "Native attributes on the wrapper; control attributes pass to the inner input." },
+    ],
+    states: [
+      { name: "default", description: "border-input around the group, bg-input/30 (dark)." },
+      { name: "focus-within", description: "border-ring + ring-ring/50 on the whole group when the input is focused." },
+      { name: "disabled", description: "Dimmed when the inner control is disabled." },
+      { name: "error", description: "aria-invalid on the input → destructive border + ring." },
+    ],
+    usage: {
+      do: [
+        "Use for search fields, prefixes/suffixes (https://, .com, $, units), or inline submit/clear buttons.",
+        "Still label the inner input (Label / aria-label).",
+        "Mark purely decorative addon icons aria-hidden.",
+      ],
+      dont: [
+        "Don't pack more than one or two addons per side.",
+        "Don't put critical actions only in an addon without an accessible name.",
+      ],
+    },
+    a11y: [
+      "The inner input still needs a programmatic label.",
+      "Focus ring is on the group via focus-within and meets WCAG 2.4.7.",
+      "Icon-only InputGroupButtons need an aria-label.",
+    ],
+    tokens: [
+      { token: "border-input / bg-input/30", role: "group surface" },
+      { token: "border-ring · ring-ring/50", role: "focus-within ring" },
+      { token: "text-muted-foreground", role: "addon icons / text" },
+      { token: "border-destructive · ring-destructive/20", role: "error state" },
+    ],
+  },
+
+  "input-otp": {
+    overview:
+      "An accessible one-time-password input rendering separate character slots with copy-paste support, backed by a single managed input (input-otp).",
+    anatomy: [
+      "InputOTP — the root managing the hidden input, value, and caret.",
+      "InputOTPGroup — groups a run of slots.",
+      "InputOTPSlot — one character cell; shows a blinking caret when it is the active slot.",
+      "InputOTPSeparator — a visual divider between groups (e.g. 000–000).",
+    ],
+    props: [
+      { name: "maxLength", type: "number", description: "Total number of characters / slots." },
+      { name: "value", type: "string", description: "Controlled value." },
+      { name: "onChange", type: "(value: string) => void", description: "Fires as the user types." },
+      { name: "pattern", type: "string", description: "Regex restricting allowed characters (e.g. digits only)." },
+      { name: "disabled", type: "boolean", default: "false", description: "Disables the input." },
+    ],
+    states: [
+      { name: "default", description: "Empty slots — border-input, bg-input/30 (dark)." },
+      { name: "active", description: "The focused slot shows border-ring + ring-ring/50 and an animated caret (bg-foreground)." },
+      { name: "filled", description: "Entered characters render in their slots." },
+      { name: "disabled", description: "opacity-50, not-allowed." },
+      { name: "error", description: "aria-invalid → destructive border + ring." },
+    ],
+    usage: {
+      do: [
+        "Use for short fixed-length codes (OTP, 2FA, PIN).",
+        "Set pattern to constrain input (digits for numeric codes).",
+        "Label the field and announce errors on invalid codes.",
+      ],
+      dont: [
+        "Don't use for free-form or variable-length input — use Input.",
+        "Don't block paste — the component supports pasting a full code.",
+      ],
+    },
+    a11y: [
+      "Backed by one real input, so paste, autofill, and SMS autocomplete work.",
+      "Full keyboard support; the active slot is visually indicated.",
+      "Needs an associated label.",
+    ],
+    tokens: [
+      { token: "border-input / bg-input/30", role: "slot surface" },
+      { token: "border-ring · ring-ring/50", role: "active-slot ring" },
+      { token: "bg-foreground", role: "animated caret" },
+      { token: "border-destructive · ring-destructive/20", role: "error state" },
+    ],
+  },
+
+  field: {
+    overview:
+      "A composable layout system that pairs a control with its label, description, and validation message in consistent vertical or horizontal arrangements — the recommended way to assemble form rows.",
+    anatomy: [
+      "FieldSet / FieldLegend — group several fields under a legend.",
+      "FieldGroup — stacks multiple Fields with consistent spacing.",
+      "Field — one row (orientation horizontal or vertical) wrapping a control.",
+      "FieldContent — holds the control alongside label/description.",
+      "FieldLabel / FieldTitle — the field's label / a heading.",
+      "FieldDescription — helper text (text-muted-foreground).",
+      "FieldError — validation message (text-destructive), shown on invalid.",
+      "FieldSeparator — divider between fields.",
+    ],
+    props: [
+      { name: "orientation", type: '"horizontal" | "vertical"', default: '"vertical"', description: "Label-above (vertical) or label-beside (horizontal) layout. On Field." },
+      { name: "...props", type: 'React.ComponentProps<"div">', description: "Native div attributes on each part." },
+    ],
+    variants: ["orientation: horizontal · vertical"],
+    states: [
+      { name: "default", description: "Label + control + optional description." },
+      { name: "invalid", description: "data-invalid / FieldError present → error text in text-destructive." },
+      { name: "selected", description: "When wrapping a choice control, the selected row can read border-primary / bg-primary/5–10." },
+    ],
+    usage: {
+      do: [
+        "Wrap each form control in a Field so label, help, and error stay associated and aligned.",
+        "Use FieldDescription for guidance and FieldError for validation messages.",
+        "Use FieldSet + FieldLegend to group related fields (e.g. an address).",
+      ],
+      dont: [
+        "Don't hand-roll label/description/error spacing per form — reuse Field.",
+        "Don't convey errors with color alone — FieldError supplies the text.",
+      ],
+    },
+    a11y: [
+      "Associates label, description, and error with the control via ids (aria-describedby / aria-labelledby).",
+      "FieldLegend names a FieldSet group for assistive tech.",
+      "FieldError is wired so screen readers announce validation messages.",
+    ],
+    tokens: [
+      { token: "text-muted-foreground", role: "FieldDescription" },
+      { token: "text-destructive", role: "FieldError text" },
+      { token: "border-primary / bg-primary/5 / bg-primary/10", role: "selected-field affordance" },
+      { token: "bg-background", role: "field surface" },
+    ],
+  },
+
+  "native-select": {
+    overview:
+      "A native <select> styled to match the design system. Prefer it for the best mobile and assistive-tech behaviour; use Select when you need custom item rendering or grouping.",
+    anatomy: [
+      "Wrapper — positions the chevron icon (data-slot=\"native-select\").",
+      "<select> — the native control holding <option>/<optgroup> children.",
+      "Chevron — a decorative indicator (pointer-events-none).",
+    ],
+    props: [
+      { name: "size", type: '"default" | "sm"', default: '"default"', description: "Control height." },
+      { name: "disabled", type: "boolean", default: "false", description: "Disables the select." },
+      { name: "...props", type: 'React.ComponentProps<"select">', description: "All native select attributes (value, defaultValue, onChange, multiple, required, name)." },
+    ],
+    variants: ["size: default · sm"],
+    states: [
+      { name: "default", description: "border-input, bg-input/30 (dark)." },
+      { name: "focus-visible", description: "border-ring + ring-ring/50." },
+      { name: "disabled", description: "opacity-50, not-allowed." },
+      { name: "error", description: "aria-invalid → destructive border + ring." },
+    ],
+    usage: {
+      do: [
+        "Use when native picker UX matters (mobile) or for simple option lists.",
+        "Associate a Label.",
+        "Group options with <optgroup> when helpful.",
+      ],
+      dont: [
+        "Don't use when you need icons, descriptions, or custom item layout — use Select.",
+      ],
+    },
+    a11y: [
+      "Native semantics give the best keyboard and screen-reader support out of the box.",
+      "Still requires an associated label.",
+      "aria-invalid drives the visible error state.",
+    ],
+    tokens: [
+      { token: "border-input / bg-input/30", role: "control surface" },
+      { token: "text-muted-foreground", role: "chevron / placeholder" },
+      { token: "border-ring · ring-ring/50", role: "focus ring" },
+      { token: "border-destructive · ring-destructive/20", role: "error state" },
+    ],
+  },
+
+  toggle: {
+    overview:
+      "A two-state button that stays pressed (on) or released (off). Built on Radix Toggle. For a set of related toggles use Toggle Group.",
+    anatomy: [
+      "Root — a button[data-state=on|off] (data-slot=\"toggle\") wrapping an icon and/or text.",
+    ],
+    props: [
+      { name: "variant", type: '"default" | "outline"', default: '"default"', description: "Transparent (default) or bordered (outline)." },
+      { name: "size", type: '"default" | "sm" | "lg"', default: '"default"', description: "Control size." },
+      { name: "pressed", type: "boolean", description: "Controlled on/off state." },
+      { name: "defaultPressed", type: "boolean", description: "Uncontrolled initial state." },
+      { name: "onPressedChange", type: "(pressed: boolean) => void", description: "Fires on toggle." },
+      { name: "disabled", type: "boolean", default: "false", description: "Disables the toggle." },
+    ],
+    variants: [
+      "variant: default · outline",
+      "size: default · sm · lg",
+    ],
+    states: [
+      { name: "off (default)", description: "Transparent; border-input for outline." },
+      { name: "on", description: "data-state=on → bg-accent / text-accent-foreground." },
+      { name: "hover", description: "bg-muted / text-muted-foreground." },
+      { name: "focus-visible", description: "border-ring + ring-ring/50." },
+      { name: "disabled", description: "opacity-50, not-allowed." },
+    ],
+    usage: {
+      do: [
+        "Use for a single binary formatting/option toggle (e.g. bold).",
+        "Give icon-only toggles an aria-label.",
+      ],
+      dont: [
+        "Don't use a Toggle where a Switch (instant setting) or Checkbox (form value) fits better.",
+        "Don't use a lone Toggle for mutually exclusive choices — use Toggle Group.",
+      ],
+    },
+    a11y: [
+      "Exposes aria-pressed reflecting the on/off state.",
+      "Keyboard: Space/Enter toggles; visible focus ring.",
+      "Icon-only toggles need an aria-label.",
+    ],
+    tokens: [
+      { token: "bg-accent / text-accent-foreground", role: "on (pressed) state" },
+      { token: "bg-muted / text-muted-foreground", role: "hover" },
+      { token: "border-input", role: "outline variant border" },
+      { token: "border-ring · ring-ring/50", role: "focus ring" },
+    ],
+  },
+
+  "toggle-group": {
+    overview:
+      "A set of toggles that share variant and size, for single- or multiple-selection groupings (e.g. text alignment, view modes). Built on Radix ToggleGroup.",
+    anatomy: [
+      "ToggleGroup — the role=group container managing selection and roving focus.",
+      "ToggleGroupItem — each toggle button, styled via the shared toggle variants.",
+    ],
+    props: [
+      { name: "type", type: '"single" | "multiple"', description: "single selects one item; multiple allows many." },
+      { name: "value", type: "string | string[]", description: "Controlled selection (string for single, array for multiple)." },
+      { name: "onValueChange", type: "(value) => void", description: "Fires when the selection changes." },
+      { name: "variant", type: '"default" | "outline"', default: '"default"', description: "Shared across all items." },
+      { name: "size", type: '"default" | "sm" | "lg"', default: '"default"', description: "Shared across all items." },
+      { name: "disabled", type: "boolean", default: "false", description: "Disables the whole group." },
+    ],
+    variants: [
+      "type: single · multiple",
+      "variant: default · outline",
+      "size: default · sm · lg",
+    ],
+    states: [
+      { name: "off", description: "Unselected item — transparent / border-input (outline)." },
+      { name: "on", description: "Selected item — bg-accent / text-accent-foreground." },
+      { name: "hover", description: "bg-muted." },
+      { name: "focus-visible", description: "ring-ring/50." },
+      { name: "disabled", description: "opacity-50." },
+    ],
+    usage: {
+      do: [
+        "Use type=single for mutually exclusive modes, type=multiple for independent toggles.",
+        "Keep items short — usually icons with aria-labels.",
+        "Give the group an accessible name.",
+      ],
+      dont: [
+        "Don't use for primary navigation — use Tabs.",
+        "Don't mix single and multiple semantics in one group.",
+      ],
+    },
+    a11y: [
+      "Roving tabindex: arrow keys move between items, Tab enters/leaves the group.",
+      "single exposes radio-like semantics; multiple uses aria-pressed per item.",
+      "Icon-only items need aria-labels; name the group.",
+    ],
+    tokens: [
+      { token: "bg-accent / text-accent-foreground", role: "selected item" },
+      { token: "bg-muted", role: "hover" },
+      { token: "border-input", role: "outline variant" },
+      { token: "ring-ring/50", role: "focus ring" },
+    ],
+  },
+
+  calendar: {
+    overview:
+      "An interactive month grid for selecting a single date, multiple dates, or a range. Built on react-day-picker, themed with our tokens.",
+    anatomy: [
+      "Calendar — caption with month/year + previous/next nav buttons, weekday header, and the day grid.",
+      "CalendarDayButton — each selectable day cell, with selected / today / outside / disabled styling.",
+    ],
+    props: [
+      { name: "mode", type: '"single" | "multiple" | "range"', default: '"single"', description: "Selection behaviour." },
+      { name: "selected", type: "Date | Date[] | DateRange", description: "Controlled selection." },
+      { name: "onSelect", type: "(value) => void", description: "Fires when the selection changes." },
+      { name: "disabled", type: "Matcher | Matcher[]", description: "Dates to disable." },
+      { name: "showOutsideDays", type: "boolean", default: "true", description: "Show leading/trailing days of adjacent months." },
+      { name: "captionLayout", type: '"label" | "dropdown"', description: "Month/year as static label or dropdowns." },
+      { name: "numberOfMonths", type: "number", default: "1", description: "How many months to render side by side." },
+    ],
+    variants: ["mode: single · multiple · range"],
+    states: [
+      { name: "default", description: "Selectable day, hover bg-accent." },
+      { name: "selected", description: "bg-primary / text-primary-foreground (range ends; middle uses accent)." },
+      { name: "today", description: "Emphasised current day (bg-accent)." },
+      { name: "outside", description: "Adjacent-month days dimmed (text-muted-foreground)." },
+      { name: "disabled", description: "Non-selectable days, opacity reduced." },
+      { name: "focus", description: "Focused day shows border-ring + ring-ring/50." },
+    ],
+    usage: {
+      do: [
+        "Use mode to match the task (single / multiple / range).",
+        "Disable invalid dates with the disabled matcher.",
+        "Pair with a Popover trigger to make a Date Picker.",
+      ],
+      dont: [
+        "Don't use a full calendar for far-apart dates (e.g. birth year) — a dropdown/native control is faster.",
+      ],
+    },
+    a11y: [
+      "react-day-picker provides grid semantics and keyboard navigation (arrows move days, PageUp/PageDown change months).",
+      "Nav buttons are labelled; the selected and today states are conveyed beyond color.",
+    ],
+    tokens: [
+      { token: "bg-primary / text-primary-foreground", role: "selected day / range ends" },
+      { token: "bg-accent / text-accent-foreground", role: "today / hover / range middle" },
+      { token: "text-muted-foreground", role: "weekday header & outside days" },
+      { token: "border-input", role: "nav buttons" },
+      { token: "border-ring · ring-ring/50", role: "focused day" },
+      { token: "bg-popover", role: "dropdown caption surface" },
+    ],
+  },
+
+  "date-picker": {
+    overview:
+      "Not a single component but a composition: a Popover whose trigger Button shows the chosen date (or a placeholder), opening a single-select Calendar. Assemble it from Popover + Button + Calendar.",
+    anatomy: [
+      "Popover — owns open/closed state.",
+      "PopoverTrigger → Button — shows a CalendarIcon and the formatted date or placeholder.",
+      "PopoverContent → Calendar (mode=single) — the date grid; selecting a date closes the popover.",
+    ],
+    props: [
+      { name: "(composition)", type: "—", description: "No dedicated props. Hold the selected Date in state; pass selected + onSelect to Calendar, and render the value in the trigger Button." },
+    ],
+    states: [
+      { name: "empty", description: "Trigger shows the placeholder (text-muted-foreground)." },
+      { name: "selected", description: "Trigger shows the formatted date." },
+      { name: "open", description: "Popover open; Calendar visible with the current selection." },
+      { name: "disabled", description: "Trigger Button disabled." },
+    ],
+    usage: {
+      do: [
+        "Format the trigger label clearly and show a placeholder when empty.",
+        "Give the trigger an accessible name even when only an icon shows.",
+        "Use the Calendar's disabled matcher for invalid dates.",
+      ],
+      dont: [
+        "Don't use for coarse dates far in the past/future — a dropdown or native input is quicker.",
+      ],
+    },
+    a11y: [
+      "Trigger needs an accessible name (the date text or an aria-label).",
+      "Calendar keyboard navigation comes from react-day-picker.",
+      "Focus returns to the trigger when the popover closes.",
+    ],
+    tokens: [
+      { token: "border-input (Button) ", role: "trigger surface" },
+      { token: "text-muted-foreground", role: "placeholder / icon" },
+      { token: "bg-popover", role: "popover panel" },
+      { token: "bg-primary / text-primary-foreground", role: "selected day in Calendar" },
+    ],
+  },
+
+  combobox: {
+    overview:
+      "A composition: a Popover whose trigger opens a searchable Command list for single-select with type-ahead filtering. Build it from Popover + Command + Button. Use Select for short, non-searchable lists.",
+    anatomy: [
+      "Popover — owns open/closed state.",
+      "PopoverTrigger → Button[role=combobox] — shows the current value and a ChevronsUpDown icon.",
+      "PopoverContent → Command — CommandInput (filter), CommandList, CommandEmpty, CommandGroup, CommandItem (with a Check on the selected item).",
+    ],
+    props: [
+      { name: "(composition)", type: "—", description: "No dedicated props. Hold open and value in state; CommandInput filters, CommandItem onSelect sets the value and closes the popover." },
+    ],
+    states: [
+      { name: "empty", description: "Trigger shows the placeholder." },
+      { name: "selected", description: "Trigger shows the chosen option; its CommandItem shows a check." },
+      { name: "open", description: "Popover open with the searchable list." },
+      { name: "highlighted", description: "Keyboard/hover-focused item — bg-accent." },
+      { name: "no results", description: "CommandEmpty message when the filter matches nothing." },
+    ],
+    usage: {
+      do: [
+        "Use for long lists where users benefit from type-ahead search.",
+        "Give the trigger an accessible name and a clear placeholder.",
+        "Provide a helpful CommandEmpty state.",
+      ],
+      dont: [
+        "Don't use for a handful of options that don't need search — use Select.",
+        "Don't use for multi-select without adapting the pattern (checkable items).",
+      ],
+    },
+    a11y: [
+      "Trigger exposes role=combobox + aria-expanded; it needs an accessible name.",
+      "cmdk provides full keyboard support (type to filter, arrows, Enter, Esc).",
+      "Focus returns to the trigger on close; the selected item is marked.",
+    ],
+    tokens: [
+      { token: "border-input (Button)", role: "trigger surface" },
+      { token: "bg-popover / text-popover-foreground", role: "popover list" },
+      { token: "bg-accent / text-accent-foreground", role: "highlighted item" },
+      { token: "text-muted-foreground", role: "placeholder / icons" },
+    ],
+  },
 }
