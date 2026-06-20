@@ -2,7 +2,7 @@
 
 > Living status for the **"Design Component to Storybook"** assignment (due 2026-06-19, Module: Storybook).
 > Portable handoff doc — any session/account can read this + `git log` + `CLAUDE.md` and continue.
-> Last updated: 2026-06-20.
+> Last updated: 2026-06-20 (all deliverables done; repo fully committed + pushed at HEAD 17debc7).
 
 ## The assignment (3 deliverables)
 
@@ -51,12 +51,18 @@ npm run storybook        # dev server at http://localhost:6006
 
 Note: `tsconfig.json` excludes `**/*.stories.tsx` from the Next build (stories are Storybook-only; Storybook's own pipeline type-checks them).
 
-## Next steps
+## Current state (2026-06-20)
 
-1. ✅ All documentation batches done — Forms (19), Overlays (12), Feedback (7), Data Display (16) = **54/54**.
-2. (Optional, score) add `argTypes`/controls to the hand-authored `components/ui/*.stories.tsx` beyond the current few.
-3. (Optional) commit the user's separate docs-site pile (token pages, registry.ts, site-header, app/layout, CLAUDE.md, figma-rest-api).
-4. Push remaining local commits when ready.
+**All three deliverables complete. Everything is committed AND pushed — working tree clean, `main` == `origin/main` (HEAD `17debc7`).** Nothing is left only on the local machine.
+
+- Deliverable 2: 54/54 documented (Forms 19, Overlays 12, Feedback 7, Data Display 16).
+- Deliverable 3: argTypes/controls enriched on the hand-authored ui stories (button, input, select, checkbox, switch, badge, tabs, tooltip, dialog, alert-dialog, dropdown-menu); accordion intentionally left (Radix union typing).
+- Docs site fully committed (nav, layout, token reference pages, site-header) — renders on a fresh clone.
+
+## Optional / not done (none block the assignment)
+
+- accordion story argTypes (skipped — union typing risk).
+- Convert demo-wrapper stories to expose real component controls (structural; current ui stories already cover controls for the chosen components).
 
 ## Done earlier (context)
 
