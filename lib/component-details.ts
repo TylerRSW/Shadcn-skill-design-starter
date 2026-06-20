@@ -1415,4 +1415,272 @@ export const componentDetails: Record<string, ComponentDetail> = {
       { token: "text-muted-foreground", role: "secondary text" },
     ],
   },
+
+  // ── Feedback ─────────────────────────────────────────────────────────────
+  alert: {
+    overview:
+      "An inline callout that draws attention to a short, important message, with an optional leading icon. Static and in-flow (not a toast or modal).",
+    anatomy: [
+      "Alert — the role=alert container (bg-card), optional leading icon slot.",
+      "AlertTitle — the concise heading.",
+      "AlertDescription — supporting text (text-muted-foreground).",
+    ],
+    props: [
+      { name: "variant", type: '"default" | "destructive"', default: '"default"', description: "Neutral info or destructive/error emphasis." },
+      { name: "...props", type: 'React.ComponentProps<"div">', description: "Native div attributes." },
+    ],
+    variants: ["variant: default · destructive"],
+    states: [
+      { name: "default", description: "Neutral callout on bg-card." },
+      { name: "destructive", description: "Error emphasis — text-destructive title, destructive description." },
+    ],
+    usage: {
+      do: [
+        "Use for persistent, contextual messages tied to a region of the page.",
+        "Keep the title short; put detail in the description.",
+        "Pair an icon with text — don't rely on color/icon alone.",
+      ],
+      dont: [
+        "Don't use for transient confirmations — use a toast (Sonner).",
+        "Don't use for blocking decisions — use Alert Dialog.",
+      ],
+    },
+    a11y: [
+      "Container carries role=alert so assistive tech announces it when it appears.",
+      "Meaning is conveyed by text, not color alone.",
+      "Note: default description uses --muted-foreground (≈4.35:1 on card) — a documented Figma-fidelity exception, not a fix.",
+    ],
+    tokens: [
+      { token: "bg-card / text-card-foreground", role: "alert surface + title" },
+      { token: "text-destructive / text-destructive/90", role: "destructive title / description" },
+      { token: "text-muted-foreground", role: "default description" },
+    ],
+  },
+
+  sonner: {
+    overview:
+      "Toast notifications — brief, auto-dismissing messages shown in a corner. <Toaster /> mounts once near the app root; the imperative toast() function fires messages from anywhere. Built on the sonner library.",
+    anatomy: [
+      "Toaster — the portal/region that renders and stacks toasts (placed once in the layout).",
+      "toast(message, options) — imperative call; variants: toast.success / .error / .warning / .info / .loading / .promise.",
+      "Each toast — optional title, description, action button, and close.",
+    ],
+    props: [
+      { name: "position (Toaster)", type: '"top-left" | "top-right" | "bottom-left" | "bottom-right" | "top-center" | "bottom-center"', default: '"bottom-right"', description: "Where toasts appear." },
+      { name: "richColors (Toaster)", type: "boolean", description: "Use colored success/error/warning styling." },
+      { name: "duration", type: "number", description: "ms before auto-dismiss (per toast or global)." },
+      { name: "action (toast)", type: "{ label, onClick }", description: "Optional action button on a toast." },
+    ],
+    variants: ["toast type: default · success · error · warning · info · loading · promise"],
+    states: [
+      { name: "enter", description: "Toast slides/fades in and stacks." },
+      { name: "visible", description: "Shown until duration elapses or dismissed." },
+      { name: "loading → resolved", description: "toast.promise swaps loading for success/error." },
+      { name: "exit", description: "Auto-dismiss or manual close animates out." },
+    ],
+    usage: {
+      do: [
+        "Use for brief, non-critical confirmations ('Saved').",
+        "Mount a single <Toaster /> in the root layout.",
+        "Use toast.promise for async operations.",
+      ],
+      dont: [
+        "Don't put essential or lengthy content in a toast — it disappears.",
+        "Don't require interaction inside a toast for a critical flow.",
+      ],
+    },
+    a11y: [
+      "sonner renders toasts in an aria-live region so they're announced.",
+      "Toasts are reachable/dismissible via keyboard; avoid color-only meaning.",
+      "Keep durations long enough to read; offer a persistent alternative for important info.",
+    ],
+    tokens: [
+      { token: "(themed via next-themes + sonner CSS vars)", role: "surface/text follow the active theme" },
+      { token: "success / warning / error", role: "richColors map to semantic intent" },
+    ],
+  },
+
+  progress: {
+    overview:
+      "A horizontal bar showing completion of a determinate task (0–100%). Built on Radix Progress.",
+    anatomy: [
+      "Progress — the track (bg-primary/20).",
+      "Indicator — the filled portion (bg-primary), width driven by value.",
+    ],
+    props: [
+      { name: "value", type: "number", description: "Current progress 0–100 (omit/null for indeterminate)." },
+      { name: "max", type: "number", default: "100", description: "Maximum value." },
+      { name: "...props", type: "React.ComponentProps<typeof ProgressPrimitive.Root>", description: "Native attributes; add aria-label if no visible label." },
+    ],
+    states: [
+      { name: "default", description: "Indicator fills to value over the track." },
+      { name: "complete", description: "value=100 — fully filled." },
+    ],
+    usage: {
+      do: [
+        "Use for determinate progress (uploads, multi-step completion).",
+        "Provide an accessible name (aria-label or associated text).",
+        "Show a numeric percentage nearby when precision helps.",
+      ],
+      dont: [
+        "Don't use for unknown-duration waits — use a Spinner/Skeleton.",
+      ],
+    },
+    a11y: [
+      "Exposes role=progressbar with aria-valuenow/min/max.",
+      "Needs an accessible name describing what is progressing.",
+    ],
+    tokens: [
+      { token: "bg-primary/20", role: "track" },
+      { token: "bg-primary", role: "filled indicator" },
+    ],
+  },
+
+  skeleton: {
+    overview:
+      "A pulsing placeholder that mimics the shape of content while it loads, reducing perceived wait and layout shift.",
+    anatomy: [
+      "Skeleton — a single shaped block (bg-accent, animate-pulse); compose several to mirror the real layout.",
+    ],
+    props: [
+      { name: "className", type: "string", description: "Size/shape via utilities (e.g. h-4 w-32 rounded-full)." },
+      { name: "...props", type: 'React.ComponentProps<"div">', description: "Native div attributes." },
+    ],
+    states: [
+      { name: "loading", description: "Pulsing placeholder shown while data is pending." },
+    ],
+    usage: {
+      do: [
+        "Match skeletons to the size/shape of the content they replace to avoid layout shift.",
+        "Use for initial loads of known layouts (cards, lists, avatars).",
+      ],
+      dont: [
+        "Don't use for very short waits where a flash is more jarring than helpful.",
+        "Don't leave skeletons up indefinitely on error — show an error/empty state.",
+      ],
+    },
+    a11y: [
+      "Decorative — convey loading status to assistive tech separately (e.g. aria-busy on the region or a live message).",
+    ],
+    tokens: [
+      { token: "bg-accent", role: "placeholder fill (with animate-pulse)" },
+    ],
+  },
+
+  spinner: {
+    overview:
+      "An indeterminate loading indicator (animated icon) for waits of unknown duration. Inherits the current text color and sizes with the font/box.",
+    anatomy: [
+      "Spinner — an animate-spin icon (Loader); color via currentColor, size via size-* / text-*.",
+    ],
+    props: [
+      { name: "className", type: "string", description: "Set size and color (e.g. size-6 text-primary)." },
+      { name: "...props", type: 'React.ComponentProps<"svg">', description: "Native svg attributes; add aria-label or wrap with status text." },
+    ],
+    states: [
+      { name: "spinning", description: "Continuous rotation while loading." },
+    ],
+    usage: {
+      do: [
+        "Use for indeterminate waits (submitting, fetching).",
+        "Place inside buttons to show in-progress actions.",
+        "Provide accompanying status text or an accessible label.",
+      ],
+      dont: [
+        "Don't use where progress is known — use Progress.",
+        "Don't show a bare spinner with no context for long waits.",
+      ],
+    },
+    a11y: [
+      "On its own it's decorative — announce loading via an aria-live region or label the control as busy.",
+      "Respect reduced-motion preferences where possible.",
+    ],
+    tokens: [
+      { token: "currentColor", role: "stroke follows surrounding text color (e.g. text-primary)" },
+    ],
+  },
+
+  badge: {
+    overview:
+      "A small label for status, counts, or categories. Non-interactive by default; can render as a link/button via asChild.",
+    anatomy: [
+      "Badge — a compact pill (data-slot=\"badge\") with optional leading icon and text.",
+    ],
+    props: [
+      { name: "variant", type: '"default" | "secondary" | "destructive" | "outline"', default: '"default"', description: "Visual style/emphasis." },
+      { name: "asChild", type: "boolean", default: "false", description: "Render as the child element (e.g. an <a>) keeping badge styles." },
+      { name: "...props", type: 'React.ComponentProps<"span">', description: "Native attributes." },
+    ],
+    variants: ["variant: default · secondary · destructive · outline"],
+    states: [
+      { name: "default", description: "bg-primary / text-primary-foreground." },
+      { name: "secondary", description: "bg-secondary / text-secondary-foreground." },
+      { name: "destructive", description: "bg-destructive surface." },
+      { name: "outline", description: "border-border, transparent surface." },
+      { name: "focus-visible (asChild link)", description: "ring-ring/50 when interactive." },
+    ],
+    usage: {
+      do: [
+        "Use for concise status, counts, or tags.",
+        "Keep text to a word or two.",
+        "Don't rely on color alone — include a clear label.",
+      ],
+      dont: [
+        "Don't use a badge as a primary action — use a Button.",
+        "Don't overload a view with many competing badges.",
+      ],
+    },
+    a11y: [
+      "Decorative by default; if it conveys status, ensure the text states it (not color only).",
+      "When interactive (asChild), it inherits proper focus ring and semantics from the child element.",
+    ],
+    tokens: [
+      { token: "bg-primary / text-primary-foreground", role: "default" },
+      { token: "bg-secondary / text-secondary-foreground", role: "secondary" },
+      { token: "bg-destructive", role: "destructive" },
+      { token: "border-border", role: "outline border" },
+      { token: "ring-ring/50", role: "focus ring (interactive)" },
+    ],
+  },
+
+  empty: {
+    overview:
+      "An empty-state block shown when there's no content yet — an icon/media, a title, a description, and an optional call-to-action.",
+    anatomy: [
+      "Empty — the centered container.",
+      "EmptyHeader — wraps media + title + description.",
+      "EmptyMedia — icon or illustration (variant: default | icon).",
+      "EmptyTitle — the headline.",
+      "EmptyDescription — supporting text (text-muted-foreground).",
+      "EmptyContent — actions (e.g. a primary Button).",
+    ],
+    props: [
+      { name: "variant (EmptyMedia)", type: '"default" | "icon"', default: '"default"', description: "Plain media or a tokened icon chip." },
+      { name: "...props", type: 'React.ComponentProps<"div">', description: "Native div attributes on each part." },
+    ],
+    states: [
+      { name: "empty", description: "Shown when a list/result set/area has no items." },
+    ],
+    usage: {
+      do: [
+        "Explain why it's empty and offer a next step (CTA).",
+        "Use for first-run, no-results, and cleared states.",
+        "Keep the message encouraging and specific.",
+      ],
+      dont: [
+        "Don't show a blank area with no guidance.",
+        "Don't use an empty state to mask an error — use an error state.",
+      ],
+    },
+    a11y: [
+      "Use a real heading (EmptyTitle) so the state is discoverable in the document outline.",
+      "Ensure any CTA is a proper, labelled control.",
+    ],
+    tokens: [
+      { token: "bg-muted", role: "icon/media chip surface" },
+      { token: "text-foreground", role: "title" },
+      { token: "text-muted-foreground", role: "description" },
+      { token: "text-primary", role: "media icon / link accent" },
+    ],
+  },
 }
