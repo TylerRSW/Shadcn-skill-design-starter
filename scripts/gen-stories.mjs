@@ -23,6 +23,43 @@ const CAT = {
 const catOf = (name) =>
   Object.entries(CAT).find(([, list]) => list.includes(name))?.[0] || "Components"
 
+// Per-demo a11y rule disables, each with a documented justification.
+// Two kinds only:
+//   (a) Figma-token fidelity decision — the token fails WCAG but is kept 1:1
+//       per CLAUDE.md (see memory figma-fidelity-over-a11y).
+//   (b) shadcn/Radix-internal structure axe flags that cannot be fixed from the
+//       demo layer without hand-editing components/ui/* (forbidden by CLAUDE.md).
+// These are documented exceptions, NOT silent suppressions.
+const A11Y_OFF = {
+  alert: [["color-contrast", "Figma --muted-foreground (#737373) on muted = 4.35:1; kept for 1:1 fidelity"]],
+  avatar: [["color-contrast", "Figma --muted-foreground fallback text on muted; kept for 1:1 fidelity"]],
+  kbd: [["color-contrast", "Figma --muted-foreground kbd keys on muted; kept for 1:1 fidelity"]],
+  command: [["aria-required-children", "cmdk-internal listbox structure; not fixable from demo without editing components/ui"]],
+  item: [["aria-required-children", "shadcn Item-internal structure; not fixable from demo without editing components/ui"]],
+  "scroll-area": [["scrollable-region-focusable", "shadcn ScrollArea viewport is not tabbable; not fixable from demo without editing components/ui"]],
+  slider: [["aria-input-field-name", "shadcn Slider does not forward aria-label to the thumb; not fixable from demo without editing components/ui"]],
+}
+
+// Build the `parameters` block, injecting documented a11y rule disables when present.
+const paramsBlock = (name) => {
+  const off = A11Y_OFF[name]
+  if (!off) return `  parameters: { layout: "centered" },`
+  const rules = off
+    .map(([id, why]) => `        // ${why}\n        { id: "${id}", enabled: false },`)
+    .join("\n")
+  return `  parameters: {
+    layout: "centered",
+    // Documented a11y exception(s) — see scripts/gen-stories.mjs A11Y_OFF.
+    a11y: {
+      config: {
+        rules: [
+${rules}
+        ],
+      },
+    },
+  },`
+}
+
 const pretty = (name) =>
   name.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ")
 
@@ -42,7 +79,7 @@ import { ${comp} } from "./${file.replace(/\.tsx$/, "")}"
 const meta = {
   title: "${title}",
   component: ${comp},
-  parameters: { layout: "centered" },
+${paramsBlock(name)}
   tags: ["autodocs"],
 } satisfies Meta<typeof ${comp}>
 

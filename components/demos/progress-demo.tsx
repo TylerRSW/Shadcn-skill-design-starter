@@ -12,5 +12,7 @@ export function ProgressDemo() {
     return () => clearTimeout(timer)
   }, [])
 
-  return <Progress value={progress} className="w-full max-w-sm" />
+  return (
+    <Progress value={progress} aria-label="Loading progress" className="w-full max-w-sm" />
+  )
 }

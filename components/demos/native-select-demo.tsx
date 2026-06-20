@@ -6,7 +6,7 @@ import {
 
 export function NativeSelectDemo() {
   return (
-    <NativeSelect className="max-w-sm" defaultValue="los-angeles">
+    <NativeSelect className="max-w-sm" defaultValue="los-angeles" aria-label="Select a city">
       <NativeSelectOption value="" disabled>
         Select a city
       </NativeSelectOption>

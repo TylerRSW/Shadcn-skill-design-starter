@@ -24,7 +24,7 @@ export function ItemDemo() {
           <ItemDescription>The Wanderers · 3:42</ItemDescription>
         </ItemContent>
         <ItemActions>
-          <Button variant="ghost" size="icon" className="size-8">
+          <Button variant="ghost" size="icon" className="size-8" aria-label="Open">
             <ChevronRight />
           </Button>
         </ItemActions>
