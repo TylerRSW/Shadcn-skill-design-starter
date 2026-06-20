@@ -22,6 +22,9 @@ yarn-error.log*
 # env files
 .env*
 
+# MCP config — may hold a real Figma API token; keep out of git
+.mcp.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
