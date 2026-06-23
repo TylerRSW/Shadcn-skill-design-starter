@@ -2,7 +2,7 @@
 
 > Living status for the **"Design Component to Storybook"** assignment (due 2026-06-19, Module: Storybook).
 > Portable handoff doc — any session/account can read this + `git log` + `CLAUDE.md` and continue.
-> Last updated: 2026-06-20 (all deliverables done; repo fully committed + pushed).
+> Last updated: 2026-06-23 (all deliverables done; gitignored test `coverage/` output).
 
 ## Switching Claude accounts (token limit handoff)
 
@@ -74,11 +74,14 @@ npm run storybook        # dev server at http://localhost:6006
 
 Note: `tsconfig.json` excludes `**/*.stories.tsx` from the Next build (stories are Storybook-only; Storybook's own pipeline type-checks them).
 
-## Current state (2026-06-20)
+## Current state (2026-06-23)
 
 **All three deliverables complete. Everything is committed AND pushed — working tree clean, `main` == `origin/main`.** Nothing is left only on the local machine.
 
-- Latest session: installed the `figma-rest-api` npm dependency (`^0.1.0`) — added to `package.json` + `package-lock.json`. Not yet used in app code; available for calling the Figma REST API.
+- This session: added `/coverage` to `.gitignore` (vitest/test-storybook coverage output should not be tracked). No app/Storybook source changed.
+- Earlier session: installed the `figma-rest-api` npm dependency (`^0.1.0`) — added to `package.json` + `package-lock.json`. Not yet used in app code; available for calling the Figma REST API.
+
+**Exact next step:** nothing outstanding for the assignment. Optional next move — start using `figma-rest-api` in app code, or tackle one of the optional items below.
 
 - Deliverable 2: 54/54 documented (Forms 19, Overlays 12, Feedback 7, Data Display 16).
 - Deliverable 3: argTypes/controls enriched on the hand-authored ui stories (button, input, select, checkbox, switch, badge, tabs, tooltip, dialog, alert-dialog, dropdown-menu); accordion intentionally left (Radix union typing).
